@@ -35,7 +35,7 @@
         },
         "nsis": {
           "languages": ["zh-CN", "en-US"],
-          "display_language_selector": true
+          "displayLanguageSelector": true
         }
       }
     },
