@@ -1,6 +1,7 @@
 import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import postcssPresetEnv from "postcss-preset-env";
+import autoPrefixer from "autoprefixer";
 import { fileURLToPath, URL } from "node:url";
 
 // https://vitejs.dev/config/
@@ -22,7 +23,7 @@ export default defineConfig(async () => ({
   envPrefix: ["VITE_", "TAURI_"],
   css: {
     postcss: {
-      plugins: [postcssPresetEnv],
+      plugins: [postcssPresetEnv, autoPrefixer],
     },
   },
   resolve: {

@@ -1,0 +1,42 @@
+= digital-signature
+宣孝卿 <jswn@jswn9945.xyz>
+:toc: preamble
+:toc-title: 目录
+
+使用 Tauri 开发的跨平台文件签名与校验工具。
+
+== 程序架构
+
+项目基于 Tauri 框架开发，这是一款……
+
+=== 前端
+
+=== 后端
+
+== 目录结构
+
+`/`::
+    Node.js 项目相关配置。 +
+    包括代码诊断、格式化工具等。
+
+    `src/`:::
+        使用 Vue 3 开发的前端代码。
+
+    `src-tauri/`:::
+        使用 Rust 开发的后端代码。
+
+== 开发
+
+=== 构建工具
+
+* Node.js 18+
+* Rust stable v1.73.0+
+* pnpm 8+
+
+=== 推荐的开发工具
+
+* https://code.visualstudio.com/[VS Code] 及以下扩展
+** https://marketplace.visualstudio.com/items?itemName=Vue.volar[Volar]
+*** 建议启用 https://cn.vuejs.org/guide/typescript/overview.html#volar-takeover-mode[Volar Takeover 模式]
+** https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode[Tauri]
+** https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer[rust-analyzer]
