@@ -18,6 +18,7 @@ const onFilesSelected = (files_selected: string[]) => {
 let unlistenFileDrop: UnlistenFn | undefined;
 let unlistenFileDropHover: UnlistenFn | undefined;
 let unlistenFileDropCanceled: UnlistenFn | undefined;
+let unlistenBlur: UnlistenFn | undefined;
 
 onMounted(async () => {
   unlistenFileDrop = await listen<string[]>(
@@ -36,21 +37,27 @@ onMounted(async () => {
   );
   unlistenFileDropCanceled = await listen<void>(
     TauriEvent.WINDOW_FILE_DROP_CANCELLED,
-    (e) => {
-      console.log(e.payload);
+    () => {
       hover.value = false;
     },
   );
+  unlistenBlur = await listen<void>(TauriEvent.WINDOW_BLUR, () => {
+    console.log("Blur");
+    hover.value = false;
+  });
 });
 
 onUnmounted(() => {
-  [unlistenFileDrop, unlistenFileDropHover, unlistenFileDropCanceled].forEach(
-    (unlisten) => {
-      if (unlisten) {
-        unlisten();
-      }
-    },
-  );
+  [
+    unlistenFileDrop,
+    unlistenFileDropHover,
+    unlistenFileDropCanceled,
+    unlistenBlur,
+  ].forEach((unlisten) => {
+    if (unlisten) {
+      unlisten();
+    }
+  });
 });
 </script>
 
