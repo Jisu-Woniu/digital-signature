@@ -1,5 +1,6 @@
 pub mod error;
 pub mod keygen;
+mod secret_file;
 pub fn add(left: usize, right: usize) -> usize {
     left + right
 }

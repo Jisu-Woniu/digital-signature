@@ -1,29 +1,20 @@
 use std::io;
 
 use ed25519::pkcs8::{self, spki};
+use rsa::pkcs8::der;
+use thiserror::Error;
 
+#[derive(Debug, Error)]
 pub enum Error {
-    Io(io::Error),
-    Pkcs8(pkcs8::Error),
-    Spki(spki::Error),
+    #[error(transparent)]
+    Io(#[from] io::Error),
+
+    #[error(transparent)]
+    Pkcs8(#[from] pkcs8::Error),
+    #[error(transparent)]
+    Spki(#[from] spki::Error),
+    #[error(transparent)]
+    Der(#[from] der::Error),
 }
 
 pub type Result<T> = core::result::Result<T, Error>;
-
-impl From<io::Error> for Error {
-    fn from(value: io::Error) -> Self {
-        Self::Io(value)
-    }
-}
-
-impl From<pkcs8::Error> for Error {
-    fn from(value: pkcs8::Error) -> Self {
-        Self::Pkcs8(value)
-    }
-}
-
-impl From<spki::Error> for Error {
-    fn from(value: spki::Error) -> Self {
-        Self::Spki(value)
-    }
-}

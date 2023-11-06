@@ -11,3 +11,8 @@ ed25519-dalek = { version = "2.0.0", features = ["rand_core"] }
 rand = "0.8.5"
 rsa = { version = "0.9.3", features = ["sha2", "getrandom"] }
 signature = { version = "2.1.0", features = ["digest"] }
+thiserror = "1.0.50"
+
+[dependencies.tokio]
+version = "1.33.0"
+features = ["rt-multi-thread", "fs", "io-util", "macros"]
