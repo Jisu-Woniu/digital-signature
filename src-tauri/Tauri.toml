@@ -1,0 +1,55 @@
+[build]
+beforeDevCommand = "pnpm dev"
+beforeBuildCommand = "pnpm build"
+devPath = "http://127.0.0.1:1420"
+distDir = "../dist"
+withGlobalTauri = false
+
+[package]
+productName = "digital-signature"
+version = "0.1.0"
+
+[tauri]
+
+[tauri.allowlist]
+
+[tauri.allowlist.dialog]
+ask = true
+confirm = true
+message = true
+open = true
+
+[tauri.allowlist.window]
+setIcon = true
+
+[tauri.bundle]
+active = true
+targets = "all"
+identifier = "digital-signature"
+icon = [
+    "icons/32x32.png",
+    "icons/128x128.png",
+    "icons/128x128@2x.png",
+    "icons/icon.icns",
+    "icons/icon.ico",
+]
+
+[tauri.bundle.windows]
+
+[tauri.bundle.windows.wix]
+language = ["zh-CN", "en-US"]
+
+[tauri.bundle.windows.nsis]
+languages = ["SimpChinese", "English"]
+displayLanguageSelector = true
+installMode = "both"
+
+[tauri.security]
+
+[[tauri.windows]]
+fullscreen = false
+resizable = true
+title = "数字签名工具"
+width = 800
+height = 600
+label = "main"
