@@ -5,12 +5,11 @@ use std::{
 };
 
 use ed25519::{
-    pkcs8::{EncodePrivateKey, EncodePublicKey},
+    pkcs8::{spki::der::pem::LineEnding, EncodePrivateKey, EncodePublicKey},
     KeypairBytes, PublicKeyBytes,
 };
 use ed25519_dalek::SigningKey;
 use rand::thread_rng;
-use rsa::pkcs8::LineEnding;
 use tokio::{
     fs::{self, DirBuilder},
     try_join,
