@@ -52,6 +52,7 @@ pub async fn write_key_pair(path: impl AsRef<Path>) -> Result<()> {
     }
     Ok(())
 }
+
 #[cfg(test)]
 mod tests {
     use std::{env, io, path::PathBuf};
@@ -82,6 +83,7 @@ mod tests {
     }
 
     #[tokio::test]
+    #[ignore = "Manual testing for file generation."]
     async fn test() -> Result<()> {
         let tmp = tmp_dir("keygen").await?;
         write_key_pair(dbg!(tmp).join("key")).await?;
