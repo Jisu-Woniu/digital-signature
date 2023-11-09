@@ -19,9 +19,6 @@ confirm = true
 message = true
 open = true
 
-[tauri.allowlist.window]
-setIcon = true
-
 [tauri.bundle]
 active = true
 targets = "all"
@@ -36,15 +33,16 @@ icon = [
 
 [tauri.bundle.windows]
 
-[tauri.bundle.windows.wix]
-language = ["zh-CN", "en-US"]
+[tauri.bundle.windows.webviewInstallMode]
+type = "embedBootstrapper"
 
 [tauri.bundle.windows.nsis]
 languages = ["SimpChinese", "English"]
 displayLanguageSelector = true
 installMode = "both"
 
-[tauri.security]
+[tauri.bundle.windows.wix]
+language = ["zh-CN", "en-US"]
 
 [[tauri.windows]]
 fullscreen = false

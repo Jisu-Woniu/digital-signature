@@ -3,6 +3,9 @@ import { computed, onMounted, onUnmounted, ref } from "vue";
 import { message, open } from "@tauri-apps/api/dialog";
 import { listen, TauriEvent, type UnlistenFn } from "@tauri-apps/api/event";
 
+import { VBtn, VIcon } from "vuetify/components";
+import { mdiFolderOpen } from "@mdi/js";
+
 const props = defineProps<{ modelValue: string }>();
 
 const emits = defineEmits<{
@@ -79,7 +82,10 @@ onUnmounted(() => {
 });
 </script>
 <template>
-  <button @click="SelectFile">选择文件</button>
+  <VBtn @click="SelectFile">
+    <VIcon :icon="mdiFolderOpen" />
+    选择文件
+  </VBtn>
   <Teleport v-if="hover" to="body">
     <div class="hover-indication">
       <div class="hover-indication-box">{{ hover }} file(s) hovering.</div>
