@@ -34,7 +34,7 @@ pub async fn write_key_pair(path: impl AsRef<Path>) -> Result<()> {
         let priv_key = path.with_file_name(priv_name);
         let pub_key = path.with_file_name(pub_name);
 
-        let (priv_key_pem, pub_key_pem) = gen_keypair()?;
+        let (priv_key_pem, pub_key_pem) = gen_key_pair()?;
 
         try_join!(
             write_secret_file(&priv_key, priv_key_pem.as_bytes()),
@@ -46,7 +46,7 @@ pub async fn write_key_pair(path: impl AsRef<Path>) -> Result<()> {
     Ok(())
 }
 
-fn gen_keypair() -> Result<(Zeroizing<String>, String)> {
+fn gen_key_pair() -> Result<(Zeroizing<String>, String)> {
     let key_pair =
         KeypairBytes::from_bytes(&SigningKey::generate(&mut thread_rng()).to_keypair_bytes());
     let priv_key_pem = key_pair
@@ -61,12 +61,12 @@ fn gen_keypair() -> Result<(Zeroizing<String>, String)> {
 #[cfg(test)]
 mod tests {
 
-    use super::{gen_keypair, Result};
+    use super::{gen_key_pair, Result};
 
     #[tokio::test]
     #[ignore = "Manual testing for file generation."]
     async fn test() -> Result<()> {
-        let (priv_key, pub_key) = gen_keypair()?;
+        let (priv_key, pub_key) = gen_key_pair()?;
         println!("{}", *priv_key);
         println!("{}", pub_key);
         Ok(())
