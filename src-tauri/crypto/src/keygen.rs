@@ -6,7 +6,7 @@ use pgp::{
     types::{CompressionAlgorithm, KeyTrait, SecretKeyTrait as _},
     KeyType, SecretKeyParamsBuilder, SignedPublicKey, SignedSecretKey,
 };
-use smallvec::{smallvec, SmallVec};
+use smallvec::smallvec;
 use tokio::{
     fs::{self, DirBuilder},
     try_join,
@@ -64,7 +64,7 @@ fn gen_key_pair(name: &str, email: &str) -> Result<(SignedSecretKey, SignedPubli
         .expect("msg")
         .generate()
         .expect("Failed to generate a plain key.");
-    let passwd_fn = || String::new();
+    let passwd_fn = String::new;
     let signed_secret_key = secret_key.sign(passwd_fn)?;
     let public_key = signed_secret_key.public_key();
     let signed_public_key = public_key.sign(&signed_secret_key, passwd_fn)?;
