@@ -3,6 +3,10 @@
 :toc: preamble
 :toc-title: 目录
 
+https://github.com/Jisu-Woniu/digital-signature/actions/workflows/tauri.yml[
+    image:https://github.com/Jisu-Woniu/digital-signature/actions/workflows/tauri.yml/badge.svg[publish]
+]
+
 使用 Tauri 开发的跨平台文件签名与校验工具。
 
 == 程序架构
