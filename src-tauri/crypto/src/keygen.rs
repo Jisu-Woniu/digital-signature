@@ -1,4 +1,3 @@
-use crate::{error::Result, secret_file::write_secret_file};
 use std::path::Path;
 
 use pgp::{
@@ -12,6 +11,8 @@ use tokio::{
     try_join,
 };
 use zeroize::Zeroizing;
+
+use crate::{error::Result, secret_file::write_secret_file};
 
 pub async fn write_key_pair(name: &str, email: &str, path: impl AsRef<Path>) -> Result<()> {
     let path = path.as_ref();
@@ -36,7 +37,7 @@ pub async fn write_key_pair(name: &str, email: &str, path: impl AsRef<Path>) -> 
     Ok(())
 }
 
-fn gen_key_pair(name: &str, email: &str) -> Result<(SignedSecretKey, SignedPublicKey)> {
+pub(crate) fn gen_key_pair(name: &str, email: &str) -> Result<(SignedSecretKey, SignedPublicKey)> {
     let secret_key = SecretKeyParamsBuilder::default()
         // Set keygen params.
         .key_type(KeyType::EdDSA)
@@ -74,7 +75,6 @@ fn gen_key_pair(name: &str, email: &str) -> Result<(SignedSecretKey, SignedPubli
 
 #[cfg(test)]
 mod tests {
-
     use pgp::{types::KeyTrait, Deserializable, SignedSecretKey};
     use tokio::fs::read_to_string;
 
