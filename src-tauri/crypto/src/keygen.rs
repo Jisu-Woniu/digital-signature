@@ -2,9 +2,11 @@ use crate::{error::Result, secret_file::write_secret_file};
 use std::path::Path;
 
 use pgp::{
-    types::{KeyTrait, SecretKeyTrait as _},
+    crypto::{hash::HashAlgorithm, sym::SymmetricKeyAlgorithm},
+    types::{CompressionAlgorithm, KeyTrait, SecretKeyTrait as _},
     KeyType, SecretKeyParamsBuilder, SignedPublicKey, SignedSecretKey,
 };
+use smallvec::{smallvec, SmallVec};
 use tokio::{
     fs::{self, DirBuilder},
     try_join,
@@ -35,13 +37,31 @@ pub async fn write_key_pair(name: &str, email: &str, path: impl AsRef<Path>) -> 
 }
 
 fn gen_key_pair(name: &str, email: &str) -> Result<(SignedSecretKey, SignedPublicKey)> {
-    let secret_key_params = SecretKeyParamsBuilder::default()
+    let secret_key = SecretKeyParamsBuilder::default()
+        // Set keygen params.
         .key_type(KeyType::EdDSA)
         .primary_user_id(format!("{} <{}>", name, email))
+        .preferred_symmetric_algorithms(smallvec![
+            SymmetricKeyAlgorithm::AES256,
+            SymmetricKeyAlgorithm::AES192,
+            SymmetricKeyAlgorithm::AES128,
+            SymmetricKeyAlgorithm::TripleDES,
+        ])
+        .preferred_hash_algorithms(smallvec![
+            HashAlgorithm::SHA2_512,
+            HashAlgorithm::SHA2_384,
+            HashAlgorithm::SHA2_256,
+            HashAlgorithm::SHA2_224,
+            HashAlgorithm::SHA1
+        ])
+        .preferred_compression_algorithms(smallvec![
+            CompressionAlgorithm::ZLIB,
+            CompressionAlgorithm::BZip2,
+            CompressionAlgorithm::ZIP
+        ])
         .can_sign(true)
         .build()
-        .expect("msg");
-    let secret_key = secret_key_params
+        .expect("msg")
         .generate()
         .expect("Failed to generate a plain key.");
     let passwd_fn = || String::new();
@@ -66,23 +86,23 @@ mod tests {
         let (secret_key, public_key) = gen_key_pair("极速蜗牛", "jswn@jswn9945.xyz")?;
         println!("{}", secret_key.to_armored_string(None)?);
         println!("{}", public_key.to_armored_string(None)?);
+        dbg!(public_key);
         Ok(())
     }
 
     #[tokio::test]
+    #[ignore = "Manual testing for file parsing."]
     async fn extract_key_info() -> Result<()> {
-        // let mut f = File::open().await?;
-        let secretkey_str =
+        let secret_key_str =
             read_to_string("/home/jswn/GpgPlayground/极速蜗牛_0x21B55C62_SECRET.asc").await?;
 
-        let secretkey_str = secretkey_str.as_str();
-        let secretkey = SignedSecretKey::from_string(secretkey_str)?;
-        dbg!(&secretkey);
-        let keyid = secretkey.0.key_id();
+        let secret_key = SignedSecretKey::from_string(&secret_key_str)?.0;
+        dbg!(&secret_key);
+        let key_id = secret_key.key_id();
 
-        dbg!(&keyid);
+        dbg!(&key_id);
 
-        dbg!(&hex::encode_upper(&keyid.as_ref()[4..]));
+        dbg!(&hex::encode_upper(&key_id.as_ref()[4..]));
 
         Ok(())
     }
