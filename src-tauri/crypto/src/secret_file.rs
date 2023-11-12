@@ -1,6 +1,5 @@
 // use crate::error::Result;
-use std::io::Result;
-use std::path::Path;
+use std::{io::Result, path::Path};
 
 #[cfg(unix)]
 pub(crate) async fn write_secret_file(path: impl AsRef<Path>, data: &[u8]) -> Result<()> {

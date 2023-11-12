@@ -1,9 +1,6 @@
 use chrono::Utc;
 use pgp::{
-    packet::{
-        SignatureConfigBuilder, SignatureType, Subpacket,
-        SubpacketData::{self},
-    },
+    packet::{SignatureConfigBuilder, SignatureType, Subpacket, SubpacketData},
     types::{PublicKeyTrait, SecretKeyTrait},
     Signature,
 };
@@ -32,13 +29,13 @@ pub fn verify(data: &[u8], public_key: &impl PublicKeyTrait, signature: &Signatu
 
 #[cfg(test)]
 mod tests {
-    use crate::keygen::gen_key_pair;
-
     use super::{sign, verify, Result};
+    use crate::keygen::gen_key_pair;
 
     #[test]
     fn test_sign() -> Result<()> {
-        let (secret_key, public_key) = gen_key_pair("DS", "ds@example.com")?;
+        let key_pair = gen_key_pair("DS", "ds@example.com")?;
+        let (secret_key, public_key) = (key_pair.secret_key(), key_pair.public_key());
         let signature = sign(b"Hello", &secret_key)?;
         verify(b"Hello", &public_key, &signature)?;
         Ok(())
@@ -46,7 +43,8 @@ mod tests {
 
     #[test]
     fn test_sign_error() -> Result<()> {
-        let (secret_key, public_key) = gen_key_pair("DS", "ds@example.com")?;
+        let key_pair = gen_key_pair("DS", "ds@example.com")?;
+        let (secret_key, public_key) = (key_pair.secret_key(), key_pair.public_key());
         let signature = sign(b"Hello", &secret_key)?;
         eprintln!(
             "{:?}",

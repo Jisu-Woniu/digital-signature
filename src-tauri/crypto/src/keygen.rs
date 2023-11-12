@@ -3,7 +3,7 @@ use std::path::Path;
 use pgp::{
     crypto::{hash::HashAlgorithm, sym::SymmetricKeyAlgorithm},
     types::{CompressionAlgorithm, KeyTrait, SecretKeyTrait as _},
-    KeyType, SecretKeyParamsBuilder, SignedPublicKey, SignedSecretKey,
+    KeyType, SecretKeyParamsBuilder,
 };
 use smallvec::smallvec;
 use tokio::{
@@ -12,7 +12,7 @@ use tokio::{
 };
 use zeroize::Zeroizing;
 
-use crate::{error::Result, secret_file::write_secret_file};
+use crate::{error::Result, key_pair::KeyPair, secret_file::write_secret_file};
 
 pub async fn write_key_pair(name: &str, email: &str, path: impl AsRef<Path>) -> Result<()> {
     let path = path.as_ref();
@@ -20,7 +20,9 @@ pub async fn write_key_pair(name: &str, email: &str, path: impl AsRef<Path>) -> 
     // Create output directory if not exist.
     DirBuilder::new().recursive(true).create(path).await?;
 
-    let (signed_secret_key, signed_public_key) = gen_key_pair(name, email)?;
+    let key_pair = gen_key_pair(name, email)?;
+    let signed_secret_key = key_pair.secret_key();
+    let signed_public_key = key_pair.public_key();
     let keyid = &hex::encode_upper(&signed_secret_key.key_id().as_ref()[4..]);
 
     let secret_key = path.join(format!("{}_0x{}_SECRET.asc", name, keyid));
@@ -37,7 +39,7 @@ pub async fn write_key_pair(name: &str, email: &str, path: impl AsRef<Path>) -> 
     Ok(())
 }
 
-pub(crate) fn gen_key_pair(name: &str, email: &str) -> Result<(SignedSecretKey, SignedPublicKey)> {
+pub(crate) fn gen_key_pair(name: &str, email: &str) -> Result<KeyPair> {
     let secret_key = SecretKeyParamsBuilder::default()
         // Set keygen params.
         .key_type(KeyType::EdDSA)
@@ -70,20 +72,20 @@ pub(crate) fn gen_key_pair(name: &str, email: &str) -> Result<(SignedSecretKey, 
     let public_key = signed_secret_key.public_key();
     let signed_public_key = public_key.sign(&signed_secret_key, passwd_fn)?;
 
-    Ok((signed_secret_key, signed_public_key))
+    Ok(KeyPair::from_keys(signed_secret_key, signed_public_key))
 }
 
 #[cfg(test)]
 mod tests {
     use pgp::{types::KeyTrait, Deserializable, SignedSecretKey};
-    use tokio::fs::read_to_string;
 
     use super::{gen_key_pair, Result};
 
     #[tokio::test]
     #[ignore = "Manual testing for file generation."]
     async fn test() -> Result<()> {
-        let (secret_key, public_key) = gen_key_pair("极速蜗牛", "jswn@jswn9945.xyz")?;
+        let key_pair = gen_key_pair("DS", "ds@example.com")?;
+        let (secret_key, public_key) = (key_pair.secret_key(), key_pair.public_key());
         println!("{}", secret_key.to_armored_string(None)?);
         println!("{}", public_key.to_armored_string(None)?);
         dbg!(public_key);
@@ -93,8 +95,9 @@ mod tests {
     #[tokio::test]
     #[ignore = "Manual testing for file parsing."]
     async fn extract_key_info() -> Result<()> {
-        let secret_key_str =
-            read_to_string("/home/jswn/GpgPlayground/极速蜗牛_0x21B55C62_SECRET.asc").await?;
+        let secret_key_str = gen_key_pair("DS", "ds@example.com")?
+            .secret_key()
+            .to_armored_string(None)?;
 
         let secret_key = SignedSecretKey::from_string(&secret_key_str)?.0;
         dbg!(&secret_key);
