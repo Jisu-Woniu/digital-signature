@@ -14,14 +14,14 @@
     "tauri": "tauri"
   },
   "dependencies": {
-    "@fontsource-variable/noto-sans-sc": "^5.0.3",
+    "@fontsource/noto-sans-sc": "^5.0.16",
+    "@fontsource/roboto": "^5.0.8",
     "@material-design-icons/svg": "^0.14.13",
     "@tauri-apps/api": "^1.5.1",
     "vue": "^3.3.8",
     "vuetify": "^3.4.0"
   },
   "devDependencies": {
-    "@fontsource/roboto": "^5.0.8",
     "@mdi/js": "^7.3.67",
     "@tauri-apps/cli": "^1.5.6",
     "@types/node": "^20.9.0",

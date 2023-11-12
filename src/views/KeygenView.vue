@@ -20,7 +20,6 @@ const file = ref<string>();
   font-weight: 300;
   line-height: 6rem;
   letter-spacing: -0.0156em;
-  font-family: Roboto, sans-serif;
   text-transform: none;
 }
 </style>

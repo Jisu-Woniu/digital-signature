@@ -5,9 +5,12 @@ settings:
   excludeLinksFromLockfile: false
 
 dependencies:
-  '@fontsource-variable/noto-sans-sc':
-    specifier: ^5.0.3
-    version: 5.0.3
+  '@fontsource/noto-sans-sc':
+    specifier: ^5.0.16
+    version: 5.0.16
+  '@fontsource/roboto':
+    specifier: ^5.0.8
+    version: 5.0.8
   '@material-design-icons/svg':
     specifier: ^0.14.13
     version: 0.14.13
@@ -22,9 +25,6 @@ dependencies:
     version: 3.4.0(typescript@5.2.2)(vite-plugin-vuetify@1.0.2)(vue@3.3.8)
 
 devDependencies:
-  '@fontsource/roboto':
-    specifier: ^5.0.8
-    version: 5.0.8
   '@mdi/js':
     specifier: ^7.3.67
     version: 7.3.67
@@ -738,13 +738,13 @@ packages:
     engines: {node: ^12.22.0 || ^14.17.0 || >=16.0.0}
     dev: true
 
-  /@fontsource-variable/noto-sans-sc@5.0.3:
-    resolution: {integrity: sha512-q0JNlXUyqUNzcNEn1wUtUl/8VZ2JmpdQYdh0ImtNRDQskWF4EldBTO3MdFZHUs/JJtnOQ/zZoFjfAOuXisYeKw==}
+  /@fontsource/noto-sans-sc@5.0.16:
+    resolution: {integrity: sha512-T3+1giTYAs4TemiReUp2gF2Pskv2fOSZ/yOuk71X7tT/gbYWX6AUGwmPkMyFulxtt07XnIttA/z3VX7bZKQpKA==}
     dev: false
 
   /@fontsource/roboto@5.0.8:
     resolution: {integrity: sha512-XxPltXs5R31D6UZeLIV1td3wTXU3jzd3f2DLsXI8tytMGBkIsGcc9sIyiupRtA8y73HAhuSCeweOoBqf6DbWCA==}
-    dev: true
+    dev: false
 
   /@humanwhocodes/config-array@0.11.13:
     resolution: {integrity: sha512-JSBDMiDKSzQVngfRjOdFXgFfklaXI4K9nLF49Auh21lmBWRLIK3+xTErTWD4KU54pb6coM6ESE7Awz/FNU3zgQ==}
