@@ -3,8 +3,9 @@ import { computed, onMounted, onUnmounted, ref } from "vue";
 import { message, open } from "@tauri-apps/api/dialog";
 import { listen, TauriEvent, type UnlistenFn } from "@tauri-apps/api/event";
 
-import { VBtn, VIcon } from "vuetify/components";
+import { VBtn, VCard, VDialog, VImg } from "vuetify/components";
 import { mdiFolderOpen } from "@mdi/js";
+import UploadFile from "@material-design-icons/svg/two-tone/upload_file.svg?url";
 
 const props = defineProps<{ modelValue: string | undefined }>();
 
@@ -16,7 +17,7 @@ const files = computed<string | undefined>({
   get: () => props.modelValue,
   set: (value) => {
     emits("update:modelValue", value);
-  }
+  },
 });
 
 const SelectFile = async () => {
@@ -24,7 +25,7 @@ const SelectFile = async () => {
   files.value = selected ?? undefined;
 };
 
-const hover = ref(0);
+const hover = ref(false);
 
 let unlistenFileDrop: UnlistenFn | undefined;
 let unlistenFileDropHover: UnlistenFn | undefined;
@@ -38,30 +39,32 @@ onMounted(async () => {
       console.log(e.payload);
       if (e.payload.length > 1) {
         await message(
-          `You can only drop one file here.\nYou have selected: ${JSON.stringify(e.payload)}`
+          `You can only drop one file here.\nYou have selected: ${JSON.stringify(
+            e.payload,
+          )}`,
         );
         return;
       }
       files.value = e.payload[0];
-      hover.value = 0;
-    }
+      hover.value = false;
+    },
   );
   unlistenFileDropHover = await listen<string[]>(
     TauriEvent.WINDOW_FILE_DROP_HOVER,
     (e) => {
       console.log(e.payload);
-      hover.value = e.payload.length;
-    }
+      hover.value = true;
+    },
   );
   unlistenFileDropCanceled = await listen<void>(
     TauriEvent.WINDOW_FILE_DROP_CANCELLED,
     () => {
-      hover.value = 0;
-    }
+      hover.value = false;
+    },
   );
   unlistenBlur = await listen<void>(TauriEvent.WINDOW_BLUR, () => {
     console.log("Blur");
-    hover.value = 0;
+    hover.value = false;
   });
 });
 
@@ -70,7 +73,7 @@ onUnmounted(() => {
     unlistenFileDrop,
     unlistenFileDropHover,
     unlistenFileDropCanceled,
-    unlistenBlur
+    unlistenBlur,
   ].forEach((unlisten) => {
     if (unlisten) {
       unlisten();
@@ -79,15 +82,16 @@ onUnmounted(() => {
 });
 </script>
 <template>
-  <VBtn @click="SelectFile">
-    <VIcon :icon="mdiFolderOpen" />
-    选择文件
-  </VBtn>
-  <Teleport v-if="hover" to="body">
-    <div class="hover-indication">
-      <div class="hover-indication-box">{{ hover }} file(s) hovering.</div>
-    </div>
-  </Teleport>
+  <VBtn :prepend-icon="mdiFolderOpen" @click="SelectFile"> 选择文件 </VBtn>
+  <VDialog v-model="hover" height="100%">
+    <VCard class="hover-indication-box">
+      <VImg :src="UploadFile" class="hover-indication-icon" />
+      <div class="hover-indication-text text-blue-darken-3 mt-3">
+        拖拽至此处
+      </div>
+    </VCard>
+  </VDialog>
+  <!-- </Teleport> -->
 </template>
 <style scoped>
 .hover-indication {
@@ -101,11 +105,21 @@ onUnmounted(() => {
 }
 
 .hover-indication-box {
-  color: red;
-  border-radius: 1rem;
-  border: 5px red dashed;
-  margin: 1rem;
-  height: calc(100% - 2rem);
-  width: calc(100% - 2rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+}
+
+.hover-indication-icon {
+  height: 5em;
+  width: 5em;
+  flex-grow: initial;
+}
+
+.hover-indication-text {
+  font-size: 2em;
 }
 </style>

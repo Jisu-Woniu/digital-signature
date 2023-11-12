@@ -4,10 +4,11 @@ import postcssPresetEnv from "postcss-preset-env";
 import autoPrefixer from "autoprefixer";
 import { fileURLToPath, URL } from "node:url";
 import vuetify from "vite-plugin-vuetify";
+import svgLoader from "vite-svg-loader";
 
 // https://vitejs.dev/config/
 export default defineConfig(async () => ({
-  plugins: [vue(), vuetify()],
+  plugins: [vue(), svgLoader(), vuetify()],
 
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
   //

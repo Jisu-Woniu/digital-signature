@@ -1,8 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import FileSelector from "@/components/FileSelector.vue";
 import {
-  VContainer,
   VTab,
   VTabs,
   VToolbar,
@@ -10,6 +8,9 @@ import {
   VWindowItem,
 } from "vuetify/components";
 import { mdiFileKey, mdiFileCheck, mdiKeyChain } from "@mdi/js";
+import SignView from "./views/SignView.vue";
+import ValidateView from "./views/ValidateView.vue";
+import KeygenView from "./views/KeygenView.vue";
 
 const enum Tab {
   sign,
@@ -18,8 +19,6 @@ const enum Tab {
 }
 
 const tab = ref(Tab.sign);
-
-const file = ref<string>();
 </script>
 
 <template>
@@ -35,31 +34,13 @@ const file = ref<string>();
 
   <VWindow v-model="tab">
     <VWindowItem :value="Tab.sign">
-      <VContainer fluid>
-        <div class="text-h1 pa-2">Sign</div>
-        <FileSelector v-model="file" />
-        <div v-if="file">
-          {{ file }}
-        </div>
-      </VContainer>
+      <SignView />
     </VWindowItem>
     <VWindowItem :value="Tab.validate">
-      <VContainer fluid>
-        <h1>Validate</h1>
-        <FileSelector v-model="file" />
-        <div v-if="file">
-          {{ file }}
-        </div>
-      </VContainer>
+      <ValidateView />
     </VWindowItem>
     <VWindowItem :value="Tab.keygen">
-      <VContainer fluid>
-        <h1>Keygen</h1>
-        <FileSelector v-model="file" />
-        <div v-if="file">
-          {{ file }}
-        </div>
-      </VContainer>
+      <KeygenView />
     </VWindowItem>
   </VWindow>
 </template>
