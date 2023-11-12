@@ -12,3 +12,4 @@ build: node_modules
 .PHONY: clean
 clean:
 	git clean -dfX
+

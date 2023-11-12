@@ -44,7 +44,7 @@ const file = ref<string>();
       </VContainer>
     </VWindowItem>
     <VWindowItem :value="Tab.validate">
-      <VContainer>
+      <VContainer fluid>
         <h1>Validate</h1>
         <FileSelector v-model="file" />
         <div v-if="file">
@@ -53,7 +53,7 @@ const file = ref<string>();
       </VContainer>
     </VWindowItem>
     <VWindowItem :value="Tab.keygen">
-      <VContainer>
+      <VContainer fluid>
         <h1>Keygen</h1>
         <FileSelector v-model="file" />
         <div v-if="file">

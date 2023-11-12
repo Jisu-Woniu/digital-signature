@@ -10,7 +10,7 @@ use pgp::{
 
 use crate::error::Result;
 
-fn sign(data: &[u8], secret_key: &impl SecretKeyTrait) -> Result<Signature> {
+pub fn sign(data: &[u8], secret_key: &impl SecretKeyTrait) -> Result<Signature> {
     let now = Utc::now();
     let sig_conf = SignatureConfigBuilder::default()
         .pub_alg(secret_key.algorithm())
@@ -26,7 +26,7 @@ fn sign(data: &[u8], secret_key: &impl SecretKeyTrait) -> Result<Signature> {
     Ok(sig_conf.sign(secret_key, String::new, data)?)
 }
 
-fn verify(data: &[u8], public_key: &impl PublicKeyTrait, signature: &Signature) -> Result<()> {
+pub fn verify(data: &[u8], public_key: &impl PublicKeyTrait, signature: &Signature) -> Result<()> {
     Ok(signature.verify(public_key, data)?)
 }
 

@@ -4,7 +4,7 @@
 :toc-title: 目录
 
 https://github.com/Jisu-Woniu/digital-signature/actions/workflows/tauri.yml[
-    image:https://github.com/Jisu-Woniu/digital-signature/actions/workflows/tauri.yml/badge.svg[publish]
+    image:https://github.com/Jisu-Woniu/digital-signature/actions/workflows/tauri.yml/badge.svg[CI status]
 ]
 
 使用 Tauri 开发的跨平台文件签名与校验工具。
@@ -42,9 +42,9 @@ Vite 是一款基于 ES Modules 的构建工具，使用 esbuild 和 Rollup 作�
 
 本项目使用 Rust 开发后端。Rust 是一款系统编程语言，其拥有内存安全、并发安全等特性，同时也拥有极高的性能与庞大的生态系统。
 
-Rust 语言具有强大的性能、友好的编译期提示，以及由所有权、生存期等机制从根本性保证的内存安全。同时，Rust 语言还提供了一套完善的工具链，包括包管理器 Cargo、代码检查工具 clippy 等，极大提升了开发效率。
+Rust 语言具有强大的性能、友好的编译期提示，以及由所有权、生存期等机制从根本上保证的内存安全。同时，Rust 语言还提供了一套完善的工具链，包括包管理器 Cargo、代码检查工具 clippy 等，极大提升了开发效率。
 
-密码学函数部分借助了 rPGP 项目和 RustCrypto 项目，并封装在单独的 crate 中，以优化编译速度。
+密码学函数部分借助了 rPGP 项目和 RustCrypto 项目，并封装在单独的 crate 中，以优化增量构建场景下的编译速度。
 
 rGPG 是一个纯 Rust 的 OpenPGP 实现，其提供了密钥生成、签名、加密、解密等功能。
 

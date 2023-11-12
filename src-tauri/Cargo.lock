@@ -542,19 +542,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "crypto"
-version = "0.1.0"
-dependencies = [
- "chrono",
- "hex",
- "pgp",
- "smallvec",
- "thiserror",
- "tokio",
- "zeroize",
-]
-
-[[package]]
 name = "crypto-bigint"
 version = "0.5.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -802,11 +789,24 @@ name = "digital-signature"
 version = "0.1.0"
 dependencies = [
  "anyhow",
- "crypto",
+ "digital-signature-crypto",
  "serde",
  "serde_json",
  "tauri",
  "tauri-build",
+]
+
+[[package]]
+name = "digital-signature-crypto"
+version = "0.1.0"
+dependencies = [
+ "chrono",
+ "hex",
+ "pgp",
+ "smallvec",
+ "thiserror",
+ "tokio",
+ "zeroize",
 ]
 
 [[package]]

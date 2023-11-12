@@ -1,23 +1,20 @@
 [package]
-name = "crypto"
-edition = "2021"
+name = "digital-signature-crypto"
+
 authors.workspace = true
+edition.workspace = true
 license.workspace = true
 repository.workspace = true
 version.workspace = true
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [dependencies]
+chrono = "0.4.31"
 hex = "0.4.3"
-# ed25519 = { version = "2.2.3", features = ["pkcs8", "pem"] }
-# ed25519-dalek = { version = "2.0.0", features = ["rand_core"] }
 pgp = "0.10.2"
 smallvec = "1.11.2"
-# rand = "0.8.5"
-# signature = { version = "2.1.0", features = ["digest"] }
 thiserror = "1.0.50"
 zeroize = "1.6.0"
-chrono = "0.4.31"
 
 [dependencies.tokio]
 version = "1.34.0"
