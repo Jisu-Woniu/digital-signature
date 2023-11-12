@@ -1,3 +1,5 @@
+//! Utilities for signing files.
+
 use chrono::Utc;
 use pgp::{
     packet::{SignatureConfigBuilder, SignatureType, Subpacket, SubpacketData},
@@ -5,8 +7,9 @@ use pgp::{
     Signature,
 };
 
-use crate::error::Result;
+use crate::Result;
 
+/// Generate a signature of the given data.
 pub fn sign(data: &[u8], secret_key: &impl SecretKeyTrait) -> Result<Signature> {
     let now = Utc::now();
     let sig_conf = SignatureConfigBuilder::default()
@@ -23,6 +26,7 @@ pub fn sign(data: &[u8], secret_key: &impl SecretKeyTrait) -> Result<Signature> 
     Ok(sig_conf.sign(secret_key, String::new, data)?)
 }
 
+/// Verify a signature of the given data.
 pub fn verify(data: &[u8], public_key: &impl PublicKeyTrait, signature: &Signature) -> Result<()> {
     Ok(signature.verify(public_key, data)?)
 }
@@ -30,11 +34,11 @@ pub fn verify(data: &[u8], public_key: &impl PublicKeyTrait, signature: &Signatu
 #[cfg(test)]
 mod tests {
     use super::{sign, verify, Result};
-    use crate::keygen::gen_key_pair;
+    use crate::key_pair::KeyPair;
 
     #[test]
     fn test_sign() -> Result<()> {
-        let key_pair = gen_key_pair("DS", "ds@example.com")?;
+        let key_pair = KeyPair::generate("DS", "ds@example.com")?;
         let (secret_key, public_key) = (key_pair.secret_key(), key_pair.public_key());
         let signature = sign(b"Hello", &secret_key)?;
         verify(b"Hello", &public_key, &signature)?;
@@ -43,7 +47,7 @@ mod tests {
 
     #[test]
     fn test_sign_error() -> Result<()> {
-        let key_pair = gen_key_pair("DS", "ds@example.com")?;
+        let key_pair = KeyPair::generate("DS", "ds@example.com")?;
         let (secret_key, public_key) = (key_pair.secret_key(), key_pair.public_key());
         let signature = sign(b"Hello", &secret_key)?;
         eprintln!(
