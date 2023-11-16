@@ -3,9 +3,10 @@ import { computed, onMounted, onUnmounted, ref } from "vue";
 import { message, open } from "@tauri-apps/api/dialog";
 import { listen, TauriEvent, type UnlistenFn } from "@tauri-apps/api/event";
 
-import { VBtn, VCard, VDialog, VImg } from "vuetify/components";
-import { mdiFolderOpen } from "@mdi/js";
-import UploadFile from "@material-design-icons/svg/two-tone/upload_file.svg?url";
+import { VBtn, VCard, VDialog, VIcon } from "vuetify/components";
+
+import UploadFile from "~icons/ic/twotone-upload-file";
+import FolderOpen from "~icons/ic/twotone-folder-open";
 
 const props = defineProps<{ modelValue: string | undefined }>();
 
@@ -27,83 +28,49 @@ const SelectFile = async () => {
 
 const hover = ref(false);
 
-let unlistenFileDrop: UnlistenFn | undefined;
-let unlistenFileDropHover: UnlistenFn | undefined;
-let unlistenFileDropCanceled: UnlistenFn | undefined;
-let unlistenBlur: UnlistenFn | undefined;
+let listeners: UnlistenFn[];
 
 onMounted(async () => {
-  unlistenFileDrop = await listen<string[]>(
-    TauriEvent.WINDOW_FILE_DROP,
-    async (e) => {
-      console.log(e.payload);
-      if (e.payload.length > 1) {
-        await message(
-          `You can only drop one file here.\nYou have selected: ${JSON.stringify(
-            e.payload,
-          )}`,
-        );
-        return;
-      }
-      files.value = e.payload[0];
-      hover.value = false;
-    },
-  );
-  unlistenFileDropHover = await listen<string[]>(
-    TauriEvent.WINDOW_FILE_DROP_HOVER,
-    (e) => {
-      console.log(e.payload);
+  listeners = await Promise.all([
+    listen<string[]>(TauriEvent.WINDOW_FILE_DROP_HOVER, () => {
       hover.value = true;
-    },
-  );
-  unlistenFileDropCanceled = await listen<void>(
-    TauriEvent.WINDOW_FILE_DROP_CANCELLED,
-    () => {
+    }),
+    listen<string[]>(TauriEvent.WINDOW_FILE_DROP, async (e) => {
+      console.log(e.payload);
+      if (e.payload.length != 1) {
+        await message(
+          "You can only drop one file here.\n" +
+            "You have selected:\n" +
+            e.payload.join("\n"),
+        );
+      } else files.value = e.payload[0];
       hover.value = false;
-    },
-  );
-  unlistenBlur = await listen<void>(TauriEvent.WINDOW_BLUR, () => {
-    console.log("Blur");
-    hover.value = false;
-  });
+    }),
+    listen<void>(TauriEvent.WINDOW_FILE_DROP_CANCELLED, () => {
+      hover.value = false;
+    }),
+    listen<void>(TauriEvent.WINDOW_BLUR, () => {
+      hover.value = false;
+    }),
+  ]);
 });
 
 onUnmounted(() => {
-  [
-    unlistenFileDrop,
-    unlistenFileDropHover,
-    unlistenFileDropCanceled,
-    unlistenBlur,
-  ].forEach((unlisten) => {
-    if (unlisten) {
-      unlisten();
-    }
-  });
+  listeners.forEach((unlisten) => unlisten());
 });
 </script>
 <template>
-  <VBtn :prepend-icon="mdiFolderOpen" @click="SelectFile"> 选择文件 </VBtn>
+  <VBtn :prepend-icon="FolderOpen" @click="SelectFile"> 选择文件 </VBtn>
   <VDialog v-model="hover" height="100%">
     <VCard class="hover-indication-box">
-      <VImg :src="UploadFile" class="hover-indication-icon" />
+      <VIcon :icon="UploadFile" class="hover-indication-icon" />
       <div class="hover-indication-text text-blue-darken-3 mt-3">
         拖拽至此处
       </div>
     </VCard>
   </VDialog>
-  <!-- </Teleport> -->
 </template>
 <style scoped>
-.hover-indication {
-  background-color: rgb(255 255 255 / 50%);
-  position: fixed;
-  z-index: 999;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-}
-
 .hover-indication-box {
   display: flex;
   flex-direction: column;
@@ -114,9 +81,7 @@ onUnmounted(() => {
 }
 
 .hover-indication-icon {
-  height: 5em;
-  width: 5em;
-  flex-grow: initial;
+  font-size: 5em;
 }
 
 .hover-indication-text {
