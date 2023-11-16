@@ -5,3 +5,11 @@
   text-size-adjust: 100%;
   font-family: Roboto, "Noto Sans SC", sans-serif;
 }
+
+h1 {
+  font-size: 6rem;
+  font-weight: 300;
+  line-height: 6rem;
+  letter-spacing: -0.0156em;
+  text-transform: none;
+}

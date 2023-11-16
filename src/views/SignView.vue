@@ -7,7 +7,7 @@ const file = ref<string>();
 
 <template>
   <VContainer fluid>
-    <h1 class="text-h1 pa-2">签名</h1>
+    <h1 class="pa-2">签名</h1>
     <FileSelector v-model="file" />
     <div v-if="file">
       {{ file }}

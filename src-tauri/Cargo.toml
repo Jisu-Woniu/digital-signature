@@ -23,9 +23,12 @@ tauri-build = { version = "1.5.0", features = [] }
 
 [dependencies]
 anyhow = { version = "1.0.75", features = ["backtrace"] }
-digital-signature-crypto = { version = "0.1.0", path = "crypto" }
 serde = { version = "1.0.192", features = ["derive"] }
 serde_json = "1.0.108"
+
+[dependencies.digital-signature-crypto]
+version = "0.1.0"
+path = "crypto"
 
 [dependencies.tauri]
 version = "1.5.2"

@@ -34,7 +34,7 @@ https://github.com/Jisu-Woniu/digital-signature/actions/workflows/tauri.yml[
 
 Vue 是一款用于构建用户界面的渐进式框架，基于标准的 Web 技术栈开发，同时提供了一套声明式、组件化的编程模型。同时，Vue 在编译期间会对模板进行诸多优化，大大提升了其运行时的性能。
 
-Vite 是一款基于 ES Modules 的构建工具，使用 esbuild 和 Rollup 作为底层构建引擎。Vite 通过使用浏览器原生的 ES Modules 特性，实现了快速的冷启动和热更新，同时也提供了一些开发时的工具，如 HMR、代码分割等。
+Vite 是一款基于 ES Modules 的构建工具，使用 esbuild 和 Rollup 作为底层构建引擎。Vite 通过使用浏览器原生的 ES Modules 特性，实现了快速的冷启动和热更新，同时也提供了一些开发时的辅助功能，如高速的模块热替换（HMR）、代码分割等。
 
 用户界面主题使用了 Vuetify，这是一款基于 Vue 3 的 Material Design 组件库。
 
@@ -65,3 +65,28 @@ RustCrypto 是一个 Rust 的密码学库，其提供了对称加密算法、非
 *** 建议启用 https://cn.vuejs.org/guide/typescript/overview.html#volar-takeover-mode[Volar Takeover 模式]
 ** https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode[Tauri]
 ** https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer[rust-analyzer]
+
+=== 构建流程
+
+安装前端依赖及 `tauri-cli`：
+
+[,bash]
+----
+pnpm install # 或 pnpm i
+----
+
+构建（会自动获取后端依赖）：
+
+[,bash]
+----
+pnpm tauri build
+----
+
+启动开发服务器：
+
+[,bash]
+----
+pnpm tauri dev
+----
+
+更多内容可通过 `pnpm vite --help` 或 `pnpm tauri --help` 查看。

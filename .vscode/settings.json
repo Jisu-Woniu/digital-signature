@@ -1,11 +1,15 @@
 {
   "cSpell.words": [
+    "fontsource",
+    "iconsets",
+    "roboto",
     "smallvec",
-    "Subpacket",
+    "subpacket",
     "subpackets",
     "thiserror",
     "unhashed",
+    "vuetify",
     "zeroize",
-    "Zeroizing"
+    "zeroizing"
   ]
 }
