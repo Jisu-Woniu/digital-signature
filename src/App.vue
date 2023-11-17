@@ -2,7 +2,6 @@
 import { ref } from "vue";
 import {
   VApp,
-  VBtn,
   VTab,
   VTabs,
   VToolbar,
@@ -13,13 +12,7 @@ import { mdiFileKey, mdiFileCheck, mdiKeyChain } from "@mdi/js";
 import SignView from "./views/SignView.vue";
 import ValidateView from "./views/ValidateView.vue";
 import KeygenView from "./views/KeygenView.vue";
-
-import AutoLightMode from "~icons/ic/twotone-brightness-auto";
-import LightMode from "~icons/ic/twotone-light-mode";
-import DarkMode from "~icons/ic/twotone-nightlight";
-import { useTheme } from "vuetify";
-import { useColorMode, useCycleList } from "@vueuse/core";
-import { watchEffect } from "vue";
+import ColorSwitcher from "./components/ColorSwitcher.vue";
 
 const enum Tab {
   sign,
@@ -28,39 +21,12 @@ const enum Tab {
 }
 
 const tab = ref(Tab.sign);
-
-const theme = useTheme();
-
-const { store: colorStore } = useColorMode({
-  onChanged: (mode) => {
-    theme.global.name.value = mode;
-  },
-});
-
-const { state: colorState, next: nextColor } = useCycleList<
-  "auto" | "light" | "dark"
->(["auto", "light", "dark"], {
-  initialValue: colorStore.value,
-});
-
-watchEffect(() => {
-  colorStore.value = colorState.value;
-});
 </script>
 
 <template>
   <VApp>
     <VToolbar title="签名工具">
-      <VBtn
-        :icon="
-          colorState === 'auto'
-            ? AutoLightMode
-            : colorState === 'light'
-              ? LightMode
-              : DarkMode
-        "
-        @click="nextColor()"
-      />
+      <ColorSwitcher />
       <template #extension>
         <VTabs v-model="tab" color="primary" align-tabs="center">
           <VTab :value="Tab.sign" :prepend-icon="mdiFileKey"> 签名 </VTab>
