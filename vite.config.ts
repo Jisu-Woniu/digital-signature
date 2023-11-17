@@ -3,12 +3,11 @@ import vue from "@vitejs/plugin-vue";
 import postcssPresetEnv from "postcss-preset-env";
 import autoPrefixer from "autoprefixer";
 import { fileURLToPath, URL } from "node:url";
-import vuetify from "vite-plugin-vuetify";
 import icons from "unplugin-icons/vite";
 
 // https://vitejs.dev/config/
 export default defineConfig(async () => ({
-  plugins: [vue(), vuetify(), icons({ compiler: "vue3" })],
+  plugins: [vue(), icons({ compiler: "vue3" })],
 
   // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
   //

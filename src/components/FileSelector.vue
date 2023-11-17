@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 import { message, open } from "@tauri-apps/api/dialog";
 import { listen, TauriEvent, type UnlistenFn } from "@tauri-apps/api/event";
 
@@ -8,18 +8,15 @@ import { VBtn, VCard, VDialog, VIcon } from "vuetify/components";
 import UploadFile from "~icons/ic/twotone-upload-file";
 import FolderOpen from "~icons/ic/twotone-folder-open";
 
+import { useVModel } from "@vueuse/core";
+
 const props = defineProps<{ modelValue: string | undefined }>();
 
 const emits = defineEmits<{
   (event: "update:modelValue", value: string | undefined): void;
 }>();
 
-const files = computed<string | undefined>({
-  get: () => props.modelValue,
-  set: (value) => {
-    emits("update:modelValue", value);
-  },
-});
+const files = useVModel(props, "modelValue", emits);
 
 const SelectFile = async () => {
   const selected = (await open({ multiple: false })) as string | null;

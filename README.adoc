@@ -38,6 +38,8 @@ Vite 是一款基于 ES Modules 的构建工具，使用 esbuild 和 Rollup 作�
 
 用户界面主题使用了 Vuetify，这是一款基于 Vue 3 的 Material Design 组件库。
 
+VueUse 项目提供了一些常用的 Vue Hooks，如 `useColorMode`、`useCycleList`、`useVModel` 等。
+
 === 后端
 
 本项目使用 Rust 开发后端。Rust 是一款系统编程语言，其拥有内存安全、并发安全等特性，同时也拥有极高的性能与庞大的生态系统。
