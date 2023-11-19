@@ -44,7 +44,7 @@ jobs:
           releaseBody: "**Full Changelog**: https://github.com/Jisu-Woniu/digital-signature/commits/v__VERSION__"
           releaseDraft: true
           prerelease: false
-      - name: Upload a Build Artifact
+      - name: Upload Build Artifacts
         uses: actions/upload-artifact@v3
         with:
           path: ${{ join(fromJson(steps.tauri.outputs.artifactPaths), fromJson('"\n"')) }}
