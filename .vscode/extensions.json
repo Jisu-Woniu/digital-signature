@@ -1,7 +1,12 @@
 {
   "recommendations": [
-    "Vue.volar",
+    "asciidoctor.asciidoctor-vscode",
+    "dbaeumer.vscode-eslint",
+    "esbenp.prettier-vscode",
+    "rust-lang.rust-analyzer",
+    "stylelint.vscode-stylelint",
     "tauri-apps.tauri-vscode",
-    "rust-lang.rust-analyzer"
+    "vivaxy.vscode-conventional-commits",
+    "Vue.volar"
   ]
 }

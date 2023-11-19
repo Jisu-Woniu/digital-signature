@@ -10,7 +10,10 @@ import FolderOpen from "~icons/ic/twotone-folder-open";
 
 import { useVModel } from "@vueuse/core";
 
-const props = defineProps<{ modelValue: string | undefined }>();
+const props = defineProps<{
+  modelValue: string | undefined;
+  directory: boolean;
+}>();
 
 const emits = defineEmits<{
   (event: "update:modelValue", value: string | undefined): void;
@@ -19,7 +22,10 @@ const emits = defineEmits<{
 const files = useVModel(props, "modelValue", emits);
 
 const SelectFile = async () => {
-  const selected = (await open({ multiple: false })) as string | null;
+  const selected = (await open({
+    multiple: false,
+    directory: props.directory,
+  })) as string | null;
   files.value = selected ?? undefined;
 };
 

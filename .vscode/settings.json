@@ -7,8 +7,11 @@
     "subpacket",
     "subpackets",
     "thiserror",
+    "twotone",
     "unhashed",
+    "unlisten",
     "vuetify",
+    "vueuse",
     "zeroize",
     "zeroizing"
   ]

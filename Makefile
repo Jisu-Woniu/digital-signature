@@ -13,3 +13,5 @@ build: node_modules
 clean:
 	git clean -dfX
 
+.PHONY: default
+default: node_modules

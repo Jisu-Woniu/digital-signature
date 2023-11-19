@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ref } from "vue";
 import {
   VApp,
   VTab,
@@ -13,6 +12,7 @@ import SignView from "./views/SignView.vue";
 import ValidateView from "./views/ValidateView.vue";
 import KeygenView from "./views/KeygenView.vue";
 import ColorSwitcher from "./components/ColorSwitcher.vue";
+import { useSessionStorage } from "@vueuse/core";
 
 const enum Tab {
   sign,
@@ -20,7 +20,7 @@ const enum Tab {
   keygen,
 }
 
-const tab = ref(Tab.sign);
+const tab = useSessionStorage("tab", Tab.sign);
 </script>
 
 <template>
