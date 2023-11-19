@@ -3,6 +3,10 @@ import { ref } from "vue";
 import FileSelector from "@/components/FileSelector.vue";
 import { VBtn, VContainer, VTextField } from "vuetify/components";
 import { mdiCheck } from "@mdi/js";
+import { invoke } from "@tauri-apps/api/tauri";
+
+defineProps<{ activated: boolean }>();
+
 const name = ref("");
 const email = ref("");
 
@@ -17,6 +21,14 @@ const rules = {
     return regex.test(value) || "非法邮件地址";
   },
 };
+
+const generateKeyPair = async () => {
+  await invoke("generate_key_pair", {
+    name: name.value,
+    email: email.value,
+    path: file.value,
+  });
+};
 </script>
 
 <template>
@@ -28,10 +40,12 @@ const rules = {
       label="邮箱"
       :rules="[rules.required, rules.email]"
     />
-    <FileSelector v-model="file" directory />
+    <FileSelector v-if="activated" v-model="file" directory />
     <div v-if="file">
       {{ file }}
     </div>
-    <VBtn :prepend-icon="mdiCheck" color="#4CAF50">提交</VBtn>
+    <VBtn :prepend-icon="mdiCheck" color="#4CAF50" @click="generateKeyPair"
+      >提交</VBtn
+    >
   </VContainer>
 </template>

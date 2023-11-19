@@ -8,10 +8,10 @@ import {
   VWindowItem,
 } from "vuetify/components";
 import { mdiFileKey, mdiFileCheck, mdiKeyChain } from "@mdi/js";
-import SignView from "./views/SignView.vue";
-import ValidateView from "./views/ValidateView.vue";
-import KeygenView from "./views/KeygenView.vue";
-import ColorSwitcher from "./components/ColorSwitcher.vue";
+import SignView from "@/views/SignView.vue";
+import ValidateView from "@/views/ValidateView.vue";
+import KeygenView from "@/views/KeygenView.vue";
+import ColorSwitcher from "@/components/ColorSwitcher.vue";
 import { useSessionStorage } from "@vueuse/core";
 
 const enum Tab {
@@ -40,13 +40,13 @@ const tab = useSessionStorage("tab", Tab.sign);
 
     <VWindow v-model="tab">
       <VWindowItem :value="Tab.sign">
-        <SignView />
+        <SignView :activated="tab === Tab.sign" />
       </VWindowItem>
       <VWindowItem :value="Tab.validate">
-        <ValidateView />
+        <ValidateView :activated="tab === Tab.validate" />
       </VWindowItem>
       <VWindowItem :value="Tab.keygen">
-        <KeygenView />
+        <KeygenView :activated="tab === Tab.keygen" />
       </VWindowItem>
     </VWindow>
   </VApp>
