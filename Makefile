@@ -7,11 +7,11 @@ dev: node_modules
 
 .PHONY: build
 build: node_modules
-	pnpm tauri build
+	pnpm tauri build -b none
 
 .PHONY: clean
 clean:
 	git clean -dfX
 
 .PHONY: default
-default: node_modules
+default: build
