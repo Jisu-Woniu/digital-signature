@@ -14,5 +14,6 @@
     "vueuse",
     "zeroize",
     "zeroizing"
-  ]
+  ],
+  "conventionalCommits.scopes": ["deps"]
 }
