@@ -23,7 +23,7 @@ const emits = defineEmits<{
 
 const file = useVModel(props, "modelValue", emits);
 
-const SelectFile = async () => {
+const selectFile = async () => {
   const selected = (await open({
     multiple: false,
     directory: props.directory,
@@ -56,7 +56,6 @@ onMounted(async () => {
         e.payload.length == 1 && (await checkFileType(e.payload[0]));
     }),
     listen<string[]>(TauriEvent.WINDOW_FILE_DROP, async (e) => {
-      console.log("DROP!!");
       if (e.payload.length != 1 || !(await checkFileType(e.payload[0]))) {
         await message(
           props.directory ? "请拖放一个文件夹到此处" : "请拖放一个文件到此处",
@@ -76,7 +75,9 @@ onMounted(async () => {
 onUnmounted(() => listeners.forEach((unlisten) => unlisten()));
 </script>
 <template>
-  <VBtn :prepend-icon="FolderOpen" @click="SelectFile"> 选择文件 </VBtn>
+  <slot :select-file="selectFile">
+    <VBtn :prepend-icon="FolderOpen" @click="selectFile"> 选择文件 </VBtn>
+  </slot>
   <VDialog v-model="hover" height="100%">
     <VCard v-if="hover_accept" class="hover-indication-box">
       <VIcon :icon="UploadFile" class="hover-indication-icon" />
@@ -86,7 +87,6 @@ onUnmounted(() => listeners.forEach((unlisten) => unlisten()));
     </VCard>
     <VCard v-else class="hover-indication-box">
       <VIcon :icon="Reject" class="hover-indication-icon" />
-      <div class="hover-indication-text text-blue-darken-3 mt-3">请</div>
     </VCard>
   </VDialog>
 </template>

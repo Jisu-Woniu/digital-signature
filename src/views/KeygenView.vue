@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import FileSelector from "@/components/FileSelector.vue";
-import { VBtn, VContainer, VTextField } from "vuetify/components";
+import FolderOpen from "~icons/ic/twotone-folder-open";
+import { VBtn, VContainer, VForm, VTextField } from "vuetify/components";
 import { mdiCheck } from "@mdi/js";
 import { invoke } from "@tauri-apps/api/tauri";
-
-defineProps<{ activated: boolean }>();
+import { message } from "@tauri-apps/api/dialog";
 
 const name = ref("");
 const email = ref("");
-
+const valid = ref<boolean | null>(null);
 const file = ref<string>();
 const rules = {
-  required: (value: string) => !!value.trim() || "必填",
+  required: (value: string) => !!value?.trim() || "必填",
   email: (value: string) => {
     const regex =
       /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
@@ -23,29 +23,51 @@ const rules = {
 };
 
 const generateKeyPair = async () => {
-  await invoke("generate_key_pair", {
-    name: name.value,
-    email: email.value,
-    path: file.value,
-  });
+  try {
+    if (valid.value) {
+      await invoke("generate_key_pair", {
+        name: name.value,
+        email: email.value,
+        path: file.value,
+      });
+      await message("生成成功");
+    }
+  } catch (x) {
+    await message("生成失败\n发生如下错误：\n" + x);
+  }
 };
 </script>
 
 <template>
   <VContainer fluid>
-    <h1 class="pa-2">密钥管理</h1>
-    <VTextField v-model="name" label="姓名" :rules="[rules.required]" />
-    <VTextField
-      v-model="email"
-      label="邮箱"
-      :rules="[rules.required, rules.email]"
-    />
-    <FileSelector v-if="activated" v-model="file" directory />
-    <div v-if="file">
-      {{ file }}
-    </div>
-    <VBtn :prepend-icon="mdiCheck" color="#4CAF50" @click="generateKeyPair"
-      >提交</VBtn
+    <h1 class="pa-2">密钥生成</h1>
+    <VForm
+      v-model="valid"
+      validate-on="blur"
+      fast-fail
+      @submit.prevent="generateKeyPair"
     >
+      <VTextField v-model="name" label="姓名" :rules="[rules.required]" />
+      <VTextField
+        v-model="email"
+        label="邮箱"
+        :rules="[rules.required, rules.email]"
+      />
+
+      <VTextField
+        v-model="file"
+        label="保存位置"
+        clearable
+        readonly
+        :rules="[rules.required]"
+      >
+        <template #append>
+          <FileSelector v-slot="{ selectFile }" v-model="file" directory>
+            <VBtn :icon="FolderOpen" @click="selectFile" />
+          </FileSelector>
+        </template>
+      </VTextField>
+      <VBtn :prepend-icon="mdiCheck" color="#4CAF50" type="submit"> 提交 </VBtn>
+    </VForm>
   </VContainer>
 </template>

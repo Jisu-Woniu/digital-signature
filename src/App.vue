@@ -32,7 +32,7 @@ const tab = useSessionStorage("tab", Tab.sign);
           <VTab :value="Tab.sign" :prepend-icon="mdiFileKey"> 签名 </VTab>
           <VTab :value="Tab.validate" :prepend-icon="mdiFileCheck"> 校验 </VTab>
           <VTab :value="Tab.keygen" :prepend-icon="mdiKeyChain">
-            密钥管理
+            密钥生成
           </VTab>
         </VTabs>
       </template>
@@ -40,13 +40,13 @@ const tab = useSessionStorage("tab", Tab.sign);
 
     <VWindow v-model="tab">
       <VWindowItem :value="Tab.sign">
-        <SignView :activated="tab === Tab.sign" />
+        <SignView v-if="tab === Tab.sign" />
       </VWindowItem>
       <VWindowItem :value="Tab.validate">
-        <ValidateView :activated="tab === Tab.validate" />
+        <ValidateView v-if="tab === Tab.validate" />
       </VWindowItem>
       <VWindowItem :value="Tab.keygen">
-        <KeygenView :activated="tab === Tab.keygen" />
+        <KeygenView v-if="tab === Tab.keygen" />
       </VWindowItem>
     </VWindow>
   </VApp>
