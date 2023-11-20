@@ -62,11 +62,15 @@ RustCrypto 是一个 Rust 的密码学库，其提供了对称加密算法、非
 
 === 推荐的开发工具
 
-* https://code.visualstudio.com/[VS Code] 及以下扩展
-** https://marketplace.visualstudio.com/items?itemName=Vue.volar[Volar]
-*** 建议启用 https://cn.vuejs.org/guide/typescript/overview.html#volar-takeover-mode[Volar Takeover 模式]
-** https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode[Tauri]
-** https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer[rust-analyzer]
+https://code.visualstudio.com/[Visual Studio Code] / https://vscodium.com/[VSCodium] 及以下扩展：
+
+Volar:: https://marketplace.visualstudio.com/items?itemName=Vue.volar[Visual Studio Marketplace] / https://open-vsx.org/extension/Vue/volar[Open VSX Registry]
+  * 建议启用 https://cn.vuejs.org/guide/typescript/overview.html#volar-takeover-mode[Volar Takeover 模式]
+Tauri:: https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode[Visual Studio Marketplace] / https://open-vsx.org/extension/tauri-apps/tauri-vscode[Open VSX Registry]
+rust-analyzer:: https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer[Visual Studio Marketplace] / https://open-vsx.org/extension/rust-lang/rust-analyzer[Open VSX Registry]
+
+以及 link:.vscode/extensions.json[工作区推荐] 中的其他扩展
+
 
 === 构建流程
 
