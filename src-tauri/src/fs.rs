@@ -24,7 +24,7 @@ impl Serialize for FileType {
 }
 
 #[tauri::command]
-pub async fn file_type(path: &Path) -> Result<FileType> {
+pub async fn detect_file_type(path: &Path) -> Result<FileType> {
     Ok(match fs::metadata(path).await {
         Ok(metadata) => {
             if metadata.is_dir() {
@@ -43,13 +43,16 @@ pub async fn file_type(path: &Path) -> Result<FileType> {
 mod tests {
     use std::path::PathBuf;
 
-    use super::file_type;
+    use super::detect_file_type;
 
     #[tokio::test]
     async fn test() {
-        println!("{:?}", file_type(&PathBuf::from("/home/")).await);
-        println!("{:?}", file_type(&PathBuf::from("/etc/fstab")).await);
-        println!("{:?}", file_type(&PathBuf::from("/home/inexist")).await);
-        println!("{:?}", file_type(&PathBuf::from("/bin/sh")).await);
+        println!("{:?}", detect_file_type(&PathBuf::from("/home/")).await);
+        println!("{:?}", detect_file_type(&PathBuf::from("/etc/fstab")).await);
+        println!(
+            "{:?}",
+            detect_file_type(&PathBuf::from("/home/inexist")).await
+        );
+        println!("{:?}", detect_file_type(&PathBuf::from("/bin/sh")).await);
     }
 }

@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { useColorMode, useCycleList } from "@vueuse/core";
-import { watchEffect } from "vue";
 import { useTheme } from "vuetify";
+import { watchEffect } from "vue";
 import { VBtn } from "vuetify/components";
+import { useColorMode, useCycleList } from "@vueuse/core";
 import AutoLightMode from "~icons/ic/twotone-brightness-auto";
-import LightMode from "~icons/ic/twotone-light-mode";
 import DarkMode from "~icons/ic/twotone-nightlight";
+import LightMode from "~icons/ic/twotone-light-mode";
 
 const theme = useTheme();
 

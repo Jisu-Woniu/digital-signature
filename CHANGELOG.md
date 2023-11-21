@@ -38,6 +38,7 @@ All notable changes to this project will be documented in this file.
 - :sparkles: Add light/dark mode switch.
 - :sparkles: Remember opened tab on refresh.
 - :sparkles: Complex scene of FileSelector.
+- :sparkles: Finish key pair generation.
 
 ### Miscellaneous Tasks
 

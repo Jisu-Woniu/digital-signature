@@ -1,9 +1,9 @@
-import { defineConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
-import postcssPresetEnv from "postcss-preset-env";
 import autoPrefixer from "autoprefixer";
-import { fileURLToPath, URL } from "node:url";
+import { URL, fileURLToPath } from "node:url";
+import postcssPresetEnv from "postcss-preset-env";
 import icons from "unplugin-icons/vite";
+import { defineConfig } from "vite";
 
 // https://vitejs.dev/config/
 export default defineConfig(async () => ({

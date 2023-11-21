@@ -15,5 +15,6 @@
     "zeroize",
     "zeroizing"
   ],
-  "conventionalCommits.scopes": ["deps"]
+  "conventionalCommits.scopes": ["deps"],
+  "typescript.tsdk": "node_modules/typescript/lib"
 }

@@ -1,18 +1,18 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import FileSelector from "@/components/FileSelector.vue";
-import FolderOpen from "~icons/ic/twotone-folder-open";
 import { VBtn, VContainer, VForm, VTextField } from "vuetify/components";
 import { mdiCheck } from "@mdi/js";
-import { invoke } from "@tauri-apps/api/tauri";
 import { message } from "@tauri-apps/api/dialog";
+import FileSelector from "@/components/FileSelector.vue";
+import { generateKeyPair } from "@/command";
+import FolderOpen from "~icons/ic/twotone-folder-open";
 
 const name = ref("");
 const email = ref("");
 const valid = ref<boolean | null>(null);
 const file = ref<string>();
 const rules = {
-  required: (value: string) => !!value?.trim() || "必填",
+  required: (value: string | undefined) => !!value?.trim() || "必填",
   email: (value: string) => {
     const regex =
       /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
@@ -22,14 +22,10 @@ const rules = {
   },
 };
 
-const generateKeyPair = async () => {
+const generate = async () => {
   try {
     if (valid.value) {
-      await invoke("generate_key_pair", {
-        name: name.value,
-        email: email.value,
-        path: file.value,
-      });
+      await generateKeyPair(name.value, email.value, file.value!);
       await message("生成成功");
     }
   } catch (x) {
@@ -45,7 +41,7 @@ const generateKeyPair = async () => {
       v-model="valid"
       validate-on="blur"
       fast-fail
-      @submit.prevent="generateKeyPair"
+      @submit.prevent="generate"
     >
       <VTextField v-model="name" label="姓名" :rules="[rules.required]" />
       <VTextField
