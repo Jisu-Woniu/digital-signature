@@ -16,7 +16,11 @@ pub(crate) struct KeyPair {
 }
 
 impl KeyPair {
-    pub(crate) fn generate(name: &str, email: &str) -> Result<Self> {
+    pub(crate) fn generate(
+        name: &str,
+        email: &str,
+        passwd_fn: impl FnOnce() -> String + Clone,
+    ) -> Result<Self> {
         let secret_key = SecretKeyParamsBuilder::default()
             // Set keygen params.
             // TODO: Allow user to choose between RSA, EdDSA and more.
@@ -44,8 +48,7 @@ impl KeyPair {
             .build()
             .expect("msg")
             .generate()?;
-        let passwd_fn = String::new;
-        let signed_secret_key = secret_key.sign(passwd_fn)?;
+        let signed_secret_key = secret_key.sign(passwd_fn.clone())?;
         let public_key = signed_secret_key.public_key();
         let signed_public_key = public_key.sign(&signed_secret_key, passwd_fn)?;
 
@@ -67,7 +70,6 @@ impl KeyPair {
     }
 }
 
-#[allow(dead_code)]
 pub(crate) async fn secret_key_from_file(path: impl AsRef<Path>) -> Result<SignedSecretKey> {
     let input = fs::read_to_string(path).await?;
     Ok(SignedSecretKey::from_string(&input)?.0)

@@ -36,7 +36,6 @@ const generate = async () => {
 
 <template>
   <VContainer fluid>
-    <h1 class="pa-2">密钥生成</h1>
     <VForm
       v-model="valid"
       validate-on="blur"

@@ -1,17 +1,16 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { VContainer } from "vuetify/components";
-import FileSelector from "@/components/FileSelector.vue";
+import FilesSelector from "@/components/FilesSelector.vue";
 
-const file = ref<string>();
+const files = ref<string[]>([]);
 </script>
 
 <template>
   <VContainer fluid>
-    <h1 class="pa-2">签名</h1>
-    <FileSelector v-model="file" />
-    <div v-if="file">
-      {{ file }}
-    </div>
+    <FilesSelector v-model="files" />
+    <ul v-if="files">
+      <li v-for="file in files" :key="file">{{ file }}</li>
+    </ul>
   </VContainer>
 </template>
