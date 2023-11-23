@@ -73,7 +73,7 @@ mod tests {
     use crate::{
         from_file::FromFile,
         key_pair::KeyPair,
-        keygen::{write_key_pair, KeyPairPath},
+        keygen::{write_key_pair, KeyPairPaths},
         Result,
     };
 
@@ -101,7 +101,7 @@ mod tests {
     #[tokio::test]
     async fn test_sign_file() -> Result<()> {
         let tmp_dir = TempDir::new()?;
-        let KeyPairPath {
+        let KeyPairPaths {
             secret_key_path,
             public_key_path,
         } = write_key_pair(

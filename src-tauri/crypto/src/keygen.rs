@@ -13,8 +13,11 @@ use zeroize::Zeroizing;
 use crate::{key_pair::KeyPair, secret_file::write_secret_file, Result};
 
 /// Represents paths of key pair.
+///
+/// Rename to camelCase for frontend usage.
 #[derive(Debug, Serialize)]
-pub struct KeyPairPath {
+#[serde(rename_all = "camelCase")]
+pub struct KeyPairPaths {
     /// Path of secret key.
     pub secret_key_path: PathBuf,
     /// Path of public key.
@@ -34,7 +37,7 @@ pub async fn write_key_pair<F>(
     email: &str,
     passwd_fn: F,
     path: impl AsRef<Path>,
-) -> Result<KeyPairPath>
+) -> Result<KeyPairPaths>
 where
     F: FnOnce() -> String + Clone,
 {
@@ -59,7 +62,7 @@ where
         fs::write(&public_key_path, &public_key_armored)
     )?;
 
-    Ok(KeyPairPath {
+    Ok(KeyPairPaths {
         secret_key_path,
         public_key_path,
     })

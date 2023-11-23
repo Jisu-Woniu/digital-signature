@@ -75,7 +75,7 @@ onUnmounted(() => {
 </script>
 <template>
   <slot :select-files="selectFiles">
-    <VBtn :prepend-icon="FolderOpen" @click="selectFiles"> 选择文件 </VBtn>
+    <VBtn :prepend-icon="FolderOpen" @click="selectFiles"> 选择多个文件 </VBtn>
   </slot>
   <VDialog v-model="hover" height="100%">
     <VCard v-if="hover_accept" class="hover-indication-box">

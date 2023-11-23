@@ -6,9 +6,9 @@ import { message } from "@tauri-apps/api/dialog";
 import FileSelector from "@/components/FileSelector.vue";
 import { generateKeyPair } from "@/command";
 import FolderOpen from "~icons/ic/twotone-folder-open";
-
 const name = ref("");
 const email = ref("");
+const password = ref("");
 const valid = ref<boolean | null>(null);
 const file = ref<string>();
 const rules = {
@@ -25,8 +25,17 @@ const rules = {
 const generate = async () => {
   try {
     if (valid.value) {
-      await generateKeyPair(name.value, email.value, file.value!);
-      await message("生成成功");
+      const paths = await generateKeyPair(
+        name.value,
+        email.value,
+        password.value,
+        file.value!,
+      );
+      await message(
+        "生成成功\n" +
+          `你的私钥路径为：${paths.secretKeyPath}\n` +
+          `公钥路径为：${paths.publicKeyPath}`,
+      );
     }
   } catch (x) {
     await message("生成失败\n发生如下错误：\n" + x);
@@ -48,20 +57,22 @@ const generate = async () => {
         label="邮箱"
         :rules="[rules.required, rules.email]"
       />
-
-      <VTextField
-        v-model="file"
-        label="保存位置"
-        clearable
-        readonly
-        :rules="[rules.required]"
-      >
-        <template #append>
-          <FileSelector v-slot="{ selectFile }" v-model="file" directory>
+      <VTextField v-model="password" label="密码（可选）" type="password" />
+      <FileSelector v-slot="{ selectFile }" v-model="file" directory>
+        <VTextField
+          v-model="file"
+          label="保存位置"
+          clearable
+          readonly
+          :rules="[rules.required]"
+          @click:control="selectFile"
+        >
+          <template #append>
             <VBtn :icon="FolderOpen" @click="selectFile" />
-          </FileSelector>
-        </template>
-      </VTextField>
+          </template>
+        </VTextField>
+      </FileSelector>
+
       <VBtn :prepend-icon="mdiCheck" color="#4CAF50" type="submit"> 提交 </VBtn>
     </VForm>
   </VContainer>
