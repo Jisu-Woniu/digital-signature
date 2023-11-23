@@ -1,16 +1,16 @@
 //! Utilities for signing files.
 
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 use chrono::Utc;
 use pgp::{
     packet::{self, SignatureConfigBuilder, SignatureType, Subpacket, SubpacketData},
     types::{PublicKeyTrait, SecretKeyTrait},
-    Signature,
+    Signature, SignedSecretKey,
 };
 use tokio::fs::{read, File};
 
-use crate::{key_pair, Result};
+use crate::{from_file::FromFile, Result};
 
 /// Generate a signature of the given data.
 fn sign(data: &[u8], secret_key: &impl SecretKeyTrait) -> Result<Signature> {
@@ -45,9 +45,9 @@ fn verify(data: &[u8], public_key: &impl PublicKeyTrait, signature: &Signature) 
 pub async fn sign_file_with_key(
     file_path: impl AsRef<Path>,
     secret_key_path: impl AsRef<Path>,
-) -> Result<Signature> {
+) -> Result<PathBuf> {
     let file_data = read(&file_path).await?;
-    let secret_key = key_pair::secret_key_from_file(secret_key_path).await?;
+    let secret_key = SignedSecretKey::try_from_file(secret_key_path.as_ref()).await?;
     let signature = sign(&file_data, &secret_key)?;
     let mut signature_path = file_path.as_ref().to_owned();
     signature_path.as_mut_os_string().push(".sig");
@@ -59,22 +59,20 @@ pub async fn sign_file_with_key(
         .into_std()
         .await;
     packet::write_packet(&mut signature_file, &signature)?;
-    Ok(signature)
+    Ok(signature_path)
 }
 
 #[cfg(test)]
 mod tests {
 
-    use pgp::{
-        errors::Error as PgpError,
-        packet::{self, Packet, PacketParser},
-    };
+    use pgp::{Signature, SignedPublicKey};
     use temp_dir::TempDir;
-    use tokio::fs::{self, read};
+    use tokio::fs::write;
 
-    use super::{sign, verify};
+    use super::{sign, sign_file_with_key, verify};
     use crate::{
-        key_pair::{self, public_key_from_file, KeyPair},
+        from_file::FromFile,
+        key_pair::KeyPair,
         keygen::{write_key_pair, KeyPairPath},
         Result,
     };
@@ -119,30 +117,13 @@ mod tests {
         let data = b"Hello, world!";
 
         let data_path = tmp_dir.path().join("data");
-        fs::write(&data_path, data).await?;
+        write(&data_path, data).await?;
 
-        let sig_data: Vec<u8> = {
-            let file_data = read(&data_path).await?;
-            let secret_key = key_pair::secret_key_from_file(secret_key_path).await?;
-            let signature = sign(&file_data, &secret_key)?;
-            let mut buffer = Vec::new();
-            packet::write_packet(&mut buffer, &signature)?;
-            buffer
-        };
+        let public_key = SignedPublicKey::try_from_file(&public_key_path).await?;
 
-        let public_key = public_key_from_file(&public_key_path).await?;
+        let sig_path = sign_file_with_key(&data_path, secret_key_path).await?;
 
-        dbg!(tmp_dir.path());
-
-        dbg!(&sig_data);
-        let packet = PacketParser::new(sig_data.as_slice())
-            .next()
-            .ok_or(PgpError::MissingPackets)??;
-        let signature = if let Packet::Signature(s) = packet {
-            Ok(s)
-        } else {
-            Err(PgpError::InvalidInput)
-        }?;
+        let signature = Signature::try_from_file(sig_path).await?;
 
         dbg!(&signature);
 

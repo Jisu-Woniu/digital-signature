@@ -71,9 +71,8 @@ mod tests {
 
     use crate::{key_pair::KeyPair, Result};
 
-    #[tokio::test]
-    #[ignore = "Manual testing for file generation."]
-    async fn test() -> Result<()> {
+    #[test]
+    fn test() -> Result<()> {
         let key_pair = KeyPair::generate("example", "example@example.com", String::new)?;
         let (secret_key, public_key) = (key_pair.secret_key(), key_pair.public_key());
         println!("{}", secret_key.to_armored_string(None)?);
@@ -82,9 +81,8 @@ mod tests {
         Ok(())
     }
 
-    #[tokio::test]
-    #[ignore = "Manual testing for file parsing."]
-    async fn extract_key_info() -> Result<()> {
+    #[test]
+    fn extract_key_info() -> Result<()> {
         let secret_key_str = KeyPair::generate("example", "example@example.com", String::new)?
             .secret_key()
             .to_armored_string(None)?;

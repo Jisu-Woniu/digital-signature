@@ -1,12 +1,9 @@
-use std::path::Path;
-
 use pgp::{
     crypto::{hash::HashAlgorithm, sym::SymmetricKeyAlgorithm},
     types::{CompressionAlgorithm, SecretKeyTrait as _},
-    Deserializable, KeyType, SecretKeyParamsBuilder, SignedPublicKey, SignedSecretKey,
+    KeyType, SecretKeyParamsBuilder, SignedPublicKey, SignedSecretKey,
 };
 use smallvec::smallvec;
-use tokio::fs;
 
 use crate::Result;
 
@@ -68,15 +65,4 @@ impl KeyPair {
     pub(crate) fn public_key(&self) -> &SignedPublicKey {
         &self.public_key
     }
-}
-
-pub(crate) async fn secret_key_from_file(path: impl AsRef<Path>) -> Result<SignedSecretKey> {
-    let input = fs::read_to_string(path).await?;
-    Ok(SignedSecretKey::from_string(&input)?.0)
-}
-
-#[allow(dead_code)]
-pub(crate) async fn public_key_from_file(path: impl AsRef<Path>) -> Result<SignedPublicKey> {
-    let input = fs::read_to_string(path).await?;
-    Ok(SignedPublicKey::from_string(&input)?.0)
 }
