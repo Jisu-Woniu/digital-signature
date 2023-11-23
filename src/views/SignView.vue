@@ -1,59 +1,126 @@
 <script setup lang="ts">
-import { ref } from "vue";
-import { VBtn, VChip, VContainer, VForm, VTextField } from "vuetify/components";
-import { computed } from "vue";
-import { mdiCheck } from "@mdi/js";
-import FilesSelector from "@/components/FilesSelector.vue";
+import {
+  VBtn,
+  VCard,
+  VCheckbox,
+  VChip,
+  VContainer,
+  VForm,
+  VStepper,
+  VStepperActions,
+  VTextField,
+} from "vuetify/components";
+import { computed, reactive, ref } from "vue";
 import FolderOpen from "~icons/ic/twotone-folder-open";
+import FileSelector from "@/components/FileSelector.vue";
+import FilesSelector from "@/components/FilesSelector.vue";
 
-const files = ref<string[]>([]);
+const rules = {
+  required: (value: string | string[] | undefined) =>
+    !!value?.length || "Required",
+};
+
+const items = ref([
+  { title: "选择待签名文件", value: 1 },
+  { title: "选择私钥文件", value: 2 },
+]);
+
+const valid = ref(false);
+
+const step = ref(1);
+
+const data: { filePaths: string[]; keyPath: string } = reactive({
+  filePaths: [],
+  keyPath: "",
+});
+
 const fileNames = computed(() =>
-  files.value.map((file) => {
+  data.filePaths.map((file) => {
     const pathComponents = file.split(/[\\/]/);
     return pathComponents[pathComponents.length - 1];
   }),
 );
-const rules = {
-  required: (value: string | undefined) => !!value?.trim() || "必填",
+
+const back = () => {
+  if (step.value > 1) {
+    step.value -= 1;
+  }
 };
-const valid = ref(false);
+
 const submit = () => {
-  if (valid.value) alert("submit");
+  console.log("Received submit.");
+  if (valid.value) {
+    if (step.value === items.value.length) {
+      // TODO: call Tauri command and print result.
+      alert("成功\n" + JSON.stringify(data));
+    } else {
+      step.value += 1;
+    }
+  }
 };
 </script>
-
 <template>
+  <!-- eslint-disable vue/valid-v-slot -->
+
   <VContainer fluid>
-    <VForm
-      v-model="valid"
-      validate-on="input"
-      fast-fail
-      @submit.prevent="submit"
-    >
-      <FilesSelector v-slot="{ selectFiles }" v-model="files">
-        <VTextField
-          v-model="files"
-          :rules="[rules.required]"
-          label="待签名文件"
-          clearable
-          readonly
-          class="input-hidden"
-          @click:clear="files = []"
-          @click:control="selectFiles"
-        >
-          <VChip v-for="fileName in fileNames" :key="fileName">
-            {{ fileName }}
-          </VChip>
-          <template #append>
-            <VBtn :icon="FolderOpen" @click="selectFiles" />
-          </template>
-        </VTextField>
-      </FilesSelector>
-      <VBtn :prepend-icon="mdiCheck" color="#4CAF50" type="submit"> 提交 </VBtn>
+    <VForm v-model="valid" validate-on="input" @submit.prevent="submit">
+      <VStepper v-model="step" :items="items">
+        <template #item.1>
+          <VCard v-if="step === 1" title="请选择待签名文件" flat>
+            <FilesSelector v-slot="{ selectFiles }" v-model="data.filePaths">
+              <VTextField
+                v-model="data.filePaths"
+                :rules="[rules.required]"
+                label="待签名文件"
+                clearable
+                readonly
+                class="input-hidden"
+                @click:clear="data.filePaths = []"
+                @click:control="selectFiles"
+              >
+                <VChip v-for="fileName in fileNames" :key="fileName">
+                  {{ fileName }}
+                </VChip>
+                <template #append>
+                  <VBtn :icon="FolderOpen" @click="selectFiles" />
+                </template>
+              </VTextField>
+            </FilesSelector>
+          </VCard>
+        </template>
+        <template #item.2>
+          <VCard v-if="step === 2" title="请选择私钥文件" flat>
+            <FileSelector v-slot="{ selectFile }" v-model="data.keyPath">
+              <VTextField
+                v-model="data.keyPath"
+                label="私钥文件"
+                clearable
+                readonly
+                :rules="[rules.required]"
+                @click:control="selectFile"
+              >
+                <template #append>
+                  <VBtn :icon="FolderOpen" @click="selectFile" />
+                </template>
+              </VTextField>
+            </FileSelector>
+          </VCard>
+        </template>
+
+        <template #actions>
+          <VStepperActions>
+            <template #prev>
+              <VBtn :disabled="step === 1" @click="back">Previous</VBtn>
+            </template>
+            <template #next>
+              <VBtn type="submit" :disabled="false">
+                {{ step === items.length ? "Submit" : "Next" }}
+              </VBtn>
+            </template>
+          </VStepperActions>
+        </template>
+      </VStepper>
     </VForm>
-    <ul v-if="files">
-      <li v-for="file in files" :key="file">{{ file }}</li>
-    </ul>
   </VContainer>
 </template>
 <style scoped>
