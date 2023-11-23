@@ -65,9 +65,10 @@ pub async fn sign_file_with_key(
 #[cfg(test)]
 mod tests {
 
-    use std::io::{self, BufReader};
-
-    use pgp::packet::{self, PacketParser};
+    use pgp::{
+        errors::Error as PgpError,
+        packet::{self, Packet, PacketParser},
+    };
     use temp_dir::TempDir;
     use tokio::fs::{self, read};
 
@@ -136,15 +137,16 @@ mod tests {
         dbg!(&sig_data);
         let packet = PacketParser::new(sig_data.as_slice())
             .next()
-            .unwrap_or(Err(pgp::errors::Error::MissingPackets))?;
-        let signature = match packet {
-            packet::Packet::Signature(s) => Ok(s),
-            _ => Err(pgp::errors::Error::InvalidInput),
-        };
+            .ok_or(PgpError::MissingPackets)??;
+        let signature = if let Packet::Signature(s) = packet {
+            Ok(s)
+        } else {
+            Err(PgpError::InvalidInput)
+        }?;
 
         dbg!(&signature);
 
-        let verified = verify(data, &public_key, &signature?).is_ok();
+        let verified = verify(data, &public_key, &signature).is_ok();
 
         dbg!(verified);
 
