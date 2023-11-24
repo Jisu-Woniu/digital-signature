@@ -1,4 +1,5 @@
 use std::{
+    collections::HashMap,
     iter::zip,
     path::{Path, PathBuf},
 };
@@ -9,16 +10,16 @@ use futures::future::try_join_all;
 use crate::error::Result;
 #[tauri::command]
 pub async fn verify_signatures(
-    sig_paths: Vec<PathBuf>,
+    signature_paths: Vec<PathBuf>,
     public_key_path: &Path,
-) -> Result<Vec<(PathBuf, bool)>> {
+) -> Result<HashMap<PathBuf, bool>> {
     let result = try_join_all(
-        sig_paths
+        signature_paths
             .iter()
             .map(|sig_path| verify_file_with_key(sig_path, public_key_path)),
     )
     .await?;
-    Ok(zip(sig_paths, result).collect())
+    Ok(zip(signature_paths, result).collect::<HashMap<PathBuf, bool>>())
 }
 
 #[cfg(test)]

@@ -14,10 +14,10 @@ import FileSelector from "@/components/FileSelector.vue";
 import FilesSelector from "@/components/FilesSelector.vue";
 import { signFiles } from "@/command";
 import FolderOpen from "~icons/ic/twotone-folder-open";
+import { message } from "@tauri-apps/api/dialog";
 
 const rules = {
-  required: (value: string | string[] | undefined) =>
-    !!value?.length || "Required",
+  required: (value: string | string[] | undefined) => !!value?.length || "必填",
 };
 
 const items = ref([
@@ -51,7 +51,14 @@ const back = () => {
 const submit = async () => {
   if (valid.value) {
     if (step.value === items.value.length) {
-      await signFiles(data.filePaths, data.keyPath, data.passwd);
+      const signatures = await signFiles(
+        data.filePaths,
+        data.keyPath,
+        data.passwd,
+      );
+      await message(
+        "签名成功。\n您的签名文件保存于：\n" + signatures.join("\n"),
+      );
     } else {
       step.value += 1;
     }
@@ -105,7 +112,7 @@ const submit = async () => {
             </FileSelector>
             <VTextField
               v-model="data.passwd"
-              title="私钥密码（可选）"
+              label="私钥密码（可选）"
               type="password"
             />
           </VCard>

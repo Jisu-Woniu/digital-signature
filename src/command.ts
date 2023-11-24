@@ -30,9 +30,25 @@ export const detectFileType = (path: string) =>
 
 export const signFiles = (
   filePaths: string[],
-  keyPath: string,
+  privateKeyPath: string,
   passwd: string,
-) => invoke<string[]>("sign_files", { filePaths, keyPath, passwd });
+) =>
+  invoke<string[]>("sign_files", {
+    filePaths,
+    privateKeyPath,
+    passwd,
+  });
 
 export const getFileNames = (files: string[]) =>
   invoke<string[]>("get_file_names", { files });
+
+export type VerificationResult = Record<string, boolean>;
+
+export const verifySignatures = (
+  signaturePaths: string[],
+  publicKeyPath: string,
+) =>
+  invoke<VerificationResult>("verify_signatures", {
+    signaturePaths,
+    publicKeyPath,
+  });
