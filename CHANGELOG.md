@@ -47,6 +47,7 @@ All notable changes to this project will be documented in this file.
 - :sparkles: Allow user setting password to the keys.
 - :sparkles: Refresh SignView.
 - :bug: Complete signing feature and start working on verifying.
+- :rocket: Finish main functions.
 
 ### Miscellaneous Tasks
 
