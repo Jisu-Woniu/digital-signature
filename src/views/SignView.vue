@@ -49,7 +49,6 @@ const back = () => {
 };
 
 const submit = async () => {
-  console.log("Received submit.");
   if (valid.value) {
     if (step.value === items.value.length) {
       await signFiles(data.filePaths, data.keyPath, data.passwd);

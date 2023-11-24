@@ -2,12 +2,10 @@
 
 use std::path::{Path, PathBuf};
 
+use futures::future::try_join;
 use pgp::types::KeyTrait;
 use serde::Serialize;
-use tokio::{
-    fs::{self, DirBuilder},
-    try_join,
-};
+use tokio::fs::{write, DirBuilder};
 use zeroize::Zeroizing;
 
 use crate::{key_pair::KeyPair, secret_file::write_secret_file, Result};
@@ -57,10 +55,11 @@ where
     let secret_key_armored = Zeroizing::new(signed_secret_key.to_armored_bytes(None)?);
     let public_key_armored = signed_public_key.to_armored_bytes(None)?;
 
-    try_join!(
+    try_join(
         write_secret_file(&secret_key_path, &secret_key_armored),
-        fs::write(&public_key_path, &public_key_armored)
-    )?;
+        write(&public_key_path, &public_key_armored),
+    )
+    .await?;
 
     Ok(KeyPairPaths {
         secret_key_path,

@@ -1,7 +1,7 @@
 use std::{ffi::OsStr, path::Path};
 
 use serde::Serialize;
-use tokio::fs;
+use tokio::fs::metadata;
 
 use crate::error::Result;
 
@@ -25,7 +25,7 @@ impl Serialize for FileType {
 
 #[tauri::command]
 pub async fn detect_file_type(path: &Path) -> Result<FileType> {
-    Ok(match fs::metadata(path).await {
+    Ok(match metadata(path).await {
         Ok(metadata) => {
             if metadata.is_dir() {
                 FileType::Dir

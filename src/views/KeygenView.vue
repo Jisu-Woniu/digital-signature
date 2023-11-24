@@ -13,13 +13,10 @@ const valid = ref<boolean | null>(null);
 const file = ref<string>();
 const rules = {
   required: (value: string | undefined) => !!value?.trim() || "必填",
-  email: (value: string) => {
-    const regex =
-      /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
-
-    console.log(`Email: ${value}`);
-    return regex.test(value) || "非法邮件地址";
-  },
+  email: (value: string) =>
+    /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(
+      value,
+    ) || "非法邮件地址",
 };
 
 const generate = async () => {

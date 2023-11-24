@@ -27,14 +27,13 @@ futures = "0.3.29"
 rayon = "1.8.0"
 serde = { version = "1.0.193", features = ["derive"] }
 serde_json = "1.0.108"
-tokio = { version = "1.34.0", features = ["fs", "macros", "rt", "rt-multi-thread"] }
+tokio = { version = "1.34.0", features = ["fs"] }
 
 [dependencies.digital-signature-crypto]
-version = "0.1.0"
 path = "crypto"
+version = "0.1.0"
 
 [dependencies.tauri]
-version = "1.5.2"
 features = [
     "config-toml",
     "dialog-ask",
@@ -44,6 +43,7 @@ features = [
     "icon-ico",
     "icon-png",
 ]
+version = "1.5.2"
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem
@@ -55,3 +55,6 @@ codegen-units = 1
 lto = true
 panic = "abort"
 strip = true
+
+[dev-dependencies]
+tokio = { version = "1.34.0", features = ["rt-multi-thread"] }

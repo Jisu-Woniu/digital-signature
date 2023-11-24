@@ -3,13 +3,13 @@ use std::{io::Result, path::Path};
 
 #[cfg(unix)]
 pub(crate) async fn write_secret_file(path: impl AsRef<Path>, data: &[u8]) -> Result<()> {
-    use tokio::{fs, io::AsyncWriteExt};
+    use tokio::{fs::OpenOptions, io::AsyncWriteExt};
 
     /// File permissions for secret data
     #[cfg(unix)]
     const SECRET_FILE_PERMS: u32 = 0o600;
 
-    let mut file = fs::OpenOptions::new()
+    let mut file = OpenOptions::new()
         .create(true)
         .write(true)
         .truncate(true)
@@ -23,8 +23,8 @@ pub(crate) async fn write_secret_file(path: impl AsRef<Path>, data: &[u8]) -> Re
 
 #[cfg(not(unix))]
 pub(crate) async fn write_secret_file(path: impl AsRef<Path>, data: &[u8]) -> Result<()> {
-    use tokio::fs;
+    use tokio::fs::write;
 
-    fs::write(path, data).await?;
+    write(path, data).await?;
     Ok(())
 }
