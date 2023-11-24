@@ -33,3 +33,6 @@ export const signFiles = (
   keyPath: string,
   passwd: string,
 ) => invoke<string[]>("sign_files", { filePaths, keyPath, passwd });
+
+export const getFileNames = (files: string[]) =>
+  invoke<string[]>("get_file_names", { files });

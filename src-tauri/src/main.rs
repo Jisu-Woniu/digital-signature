@@ -4,7 +4,10 @@
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
 
 use crate::{
-    fs::detect_file_type, keygen::generate_key_pair, sign::sign_files, verify::verify_signatures,
+    fs::{detect_file_type, get_file_names},
+    keygen::generate_key_pair,
+    sign::sign_files,
+    verify::verify_signatures,
 };
 
 mod error;
@@ -19,7 +22,8 @@ fn main() -> anyhow::Result<()> {
             generate_key_pair,
             detect_file_type,
             sign_files,
-            verify_signatures
+            verify_signatures,
+            get_file_names
         ])
         .run(tauri::generate_context!())?;
     Ok(())

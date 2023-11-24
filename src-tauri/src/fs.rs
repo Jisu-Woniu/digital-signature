@@ -1,4 +1,4 @@
-use std::path::Path;
+use std::{ffi::OsStr, path::Path};
 
 use serde::Serialize;
 use tokio::fs;
@@ -37,6 +37,14 @@ pub async fn detect_file_type(path: &Path) -> Result<FileType> {
         }
         Err(_) => FileType::Inexist,
     })
+}
+
+#[tauri::command]
+pub fn get_file_names(files: Vec<&Path>) -> Vec<&OsStr> {
+    files
+        .into_iter()
+        .filter_map(|file| file.file_name())
+        .collect()
 }
 
 #[cfg(test)]
