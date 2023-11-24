@@ -27,3 +27,9 @@ export const enum FileType {
 
 export const detectFileType = (path: string) =>
   invoke<FileType>("detect_file_type", { path });
+
+export const signFiles = (
+  filePaths: string[],
+  keyPath: string,
+  passwd: string,
+) => invoke<string[]>("sign_files", { filePaths, keyPath, passwd });

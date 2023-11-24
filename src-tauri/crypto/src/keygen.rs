@@ -70,9 +70,10 @@ where
 
 #[cfg(test)]
 mod tests {
-    use pgp::{types::KeyTrait, Deserializable, SignedSecretKey};
 
-    use crate::{key_pair::KeyPair, Result};
+    use pgp::{types::KeyTrait, SignedSecretKey};
+
+    use crate::{from_file::FromFile, key_pair::KeyPair, Result};
 
     #[test]
     fn test() -> Result<()> {
@@ -88,9 +89,9 @@ mod tests {
     fn extract_key_info() -> Result<()> {
         let secret_key_str = KeyPair::generate("example", "example@example.com", String::new)?
             .secret_key()
-            .to_armored_string(None)?;
+            .to_armored_bytes(None)?;
 
-        let secret_key = SignedSecretKey::from_string(&secret_key_str)?.0;
+        let secret_key = SignedSecretKey::try_from_armored_bytes(secret_key_str)?;
         dbg!(&secret_key);
         let key_id = secret_key.key_id();
         dbg!(&key_id);

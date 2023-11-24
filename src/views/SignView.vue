@@ -2,7 +2,6 @@
 import {
   VBtn,
   VCard,
-  VCheckbox,
   VChip,
   VContainer,
   VForm,
@@ -11,9 +10,10 @@ import {
   VTextField,
 } from "vuetify/components";
 import { computed, reactive, ref } from "vue";
-import FolderOpen from "~icons/ic/twotone-folder-open";
 import FileSelector from "@/components/FileSelector.vue";
 import FilesSelector from "@/components/FilesSelector.vue";
+import { signFiles } from "@/command";
+import FolderOpen from "~icons/ic/twotone-folder-open";
 
 const rules = {
   required: (value: string | string[] | undefined) =>
@@ -29,9 +29,10 @@ const valid = ref(false);
 
 const step = ref(1);
 
-const data: { filePaths: string[]; keyPath: string } = reactive({
-  filePaths: [],
+const data = reactive({
+  filePaths: new Array<string>(),
   keyPath: "",
+  passwd: "",
 });
 
 const fileNames = computed(() =>
@@ -47,12 +48,11 @@ const back = () => {
   }
 };
 
-const submit = () => {
+const submit = async () => {
   console.log("Received submit.");
   if (valid.value) {
     if (step.value === items.value.length) {
-      // TODO: call Tauri command and print result.
-      alert("成功\n" + JSON.stringify(data));
+      await signFiles(data.filePaths, data.keyPath, data.passwd);
     } else {
       step.value += 1;
     }
@@ -104,6 +104,11 @@ const submit = () => {
                 </template>
               </VTextField>
             </FileSelector>
+            <VTextField
+              v-model="data.passwd"
+              title="私钥密码（可选）"
+              type="password"
+            />
           </VCard>
         </template>
 

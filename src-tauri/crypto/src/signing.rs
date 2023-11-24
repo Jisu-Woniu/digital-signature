@@ -1,19 +1,26 @@
 //! Utilities for signing files.
 
-use std::path::{Path, PathBuf};
+use std::{
+    io::{self, Read},
+    path::{Path, PathBuf},
+};
 
 use chrono::Utc;
 use pgp::{
     packet::{self, SignatureConfigBuilder, SignatureType, Subpacket, SubpacketData},
-    types::{PublicKeyTrait, SecretKeyTrait},
-    Signature, SignedSecretKey,
+    types::SecretKeyTrait,
+    Signature, SignedPublicKey, SignedSecretKey,
 };
-use tokio::fs::{read, File};
+use tokio::fs::File;
 
 use crate::{from_file::FromFile, Result};
 
 /// Generate a signature of the given data.
-fn sign(data: &[u8], secret_key: &impl SecretKeyTrait) -> Result<Signature> {
+fn sign(
+    data: impl Read,
+    secret_key: &impl SecretKeyTrait,
+    passwd_fn: impl FnOnce() -> String + Clone,
+) -> Result<Signature> {
     let now = Utc::now();
     let sig_conf = SignatureConfigBuilder::default()
         .pub_alg(secret_key.algorithm())
@@ -26,12 +33,7 @@ fn sign(data: &[u8], secret_key: &impl SecretKeyTrait) -> Result<Signature> {
         ])
         .unhashed_subpackets(vec![])
         .build()?;
-    Ok(sig_conf.sign(secret_key, String::new, data)?)
-}
-#[allow(dead_code)]
-/// Verify a signature of the given data.
-fn verify(data: &[u8], public_key: &impl PublicKeyTrait, signature: &Signature) -> Result<()> {
-    Ok(signature.verify(public_key, data)?)
+    Ok(sig_conf.sign(secret_key, passwd_fn, data)?)
 }
 
 /// Sign the given file with the given secret key.
@@ -42,13 +44,19 @@ fn verify(data: &[u8], public_key: &impl PublicKeyTrait, signature: &Signature) 
 /// - The file or secret key cannot be read.
 /// - Secret key is invalid.
 /// - Failed to write to signature file.
-pub async fn sign_file_with_key(
-    file_path: impl AsRef<Path>,
-    secret_key_path: impl AsRef<Path>,
-) -> Result<PathBuf> {
-    let file_data = read(&file_path).await?;
-    let secret_key = SignedSecretKey::try_from_file(secret_key_path.as_ref()).await?;
-    let signature = sign(&file_data, &secret_key)?;
+pub async fn sign_file_with_key<F, S, PF>(
+    file_path: F,
+    secret_key_path: S,
+    passwd_fn: PF,
+) -> Result<PathBuf>
+where
+    F: AsRef<Path>,
+    S: AsRef<Path> + Send,
+    PF: FnOnce() -> String + Clone,
+{
+    let file = File::open(&file_path).await?;
+    let secret_key = SignedSecretKey::try_from_file(secret_key_path).await?;
+    let signature = sign(file.into_std().await, &secret_key, passwd_fn)?;
     let mut signature_path = file_path.as_ref().to_owned();
     signature_path.as_mut_os_string().push(".sig");
     let mut signature_file = File::options()
@@ -62,6 +70,35 @@ pub async fn sign_file_with_key(
     Ok(signature_path)
 }
 
+/// .
+///
+/// # Errors
+///
+/// This function will return an error if .
+pub async fn verify_file_with_key<S, P>(signature_path: S, public_key_path: P) -> Result<bool>
+where
+    S: AsRef<Path> + Send,
+    P: AsRef<Path> + Send,
+{
+    let signature_path = signature_path.as_ref();
+    let signature = Signature::try_from_file(signature_path).await?;
+    let public_key = SignedPublicKey::try_from_file(public_key_path).await?;
+    if let Some(file_path) = signature_path
+        .extension()
+        .is_some_and(|ext| ext == "sig")
+        .then(|| signature_path.with_extension(""))
+    {
+        Ok(signature
+            .verify(&public_key, File::open(file_path).await?.into_std().await)
+            .is_ok())
+    } else {
+        Err(io::Error::new(
+            io::ErrorKind::NotFound,
+            "Original file not found.",
+        ))?
+    }
+}
+
 #[cfg(test)]
 mod tests {
 
@@ -69,7 +106,7 @@ mod tests {
     use temp_dir::TempDir;
     use tokio::fs::write;
 
-    use super::{sign, sign_file_with_key, verify};
+    use super::{sign, sign_file_with_key};
     use crate::{
         from_file::FromFile,
         key_pair::KeyPair,
@@ -81,8 +118,8 @@ mod tests {
     fn test_sign() -> Result<()> {
         let key_pair = KeyPair::generate("example", "example@example.com", String::new)?;
         let (secret_key, public_key) = (key_pair.secret_key(), key_pair.public_key());
-        let signature = sign(b"Hello", &secret_key)?;
-        verify(b"Hello", &public_key, &signature)?;
+        let signature = sign(&b"Hello"[..], &secret_key, String::new)?;
+        signature.verify(public_key, &b"Hello"[..])?;
         Ok(())
     }
 
@@ -90,16 +127,18 @@ mod tests {
     fn test_sign_error() -> Result<()> {
         let key_pair = KeyPair::generate("example", "example@example.com", String::new)?;
         let (secret_key, public_key) = (key_pair.secret_key(), key_pair.public_key());
-        let signature = sign(b"Hello", &secret_key)?;
+        let signature = sign(&b"Hello"[..], &secret_key, String::new)?;
         eprintln!(
             "{:?}",
-            verify(b"Help", &public_key, &signature).expect_err("Should not pass")
+            signature
+                .verify(&public_key, &b"Help"[..])
+                .expect_err("Should not pass")
         );
         Ok(())
     }
 
     #[tokio::test]
-    async fn test_sign_file() -> Result<()> {
+    async fn test_whole_process() -> Result<()> {
         let tmp_dir = TempDir::new()?;
         let KeyPairPaths {
             secret_key_path,
@@ -118,16 +157,16 @@ mod tests {
 
         let data_path = tmp_dir.path().join("data");
         write(&data_path, data).await?;
-
-        let public_key = SignedPublicKey::try_from_file(&public_key_path).await?;
-
-        let sig_path = sign_file_with_key(&data_path, secret_key_path).await?;
-
+        dbg!(&data_path);
+        let sig_path = sign_file_with_key(&data_path, &secret_key_path, String::new).await?;
+        dbg!(&sig_path);
         let signature = Signature::try_from_file(sig_path).await?;
+        let public_key = SignedPublicKey::try_from_file(&public_key_path).await?;
+        dbg!(&public_key);
 
         dbg!(&signature);
 
-        let verified = verify(data, &public_key, &signature).is_ok();
+        let verified = signature.verify(&public_key, &data[..]).is_ok(); //verify(data, &public_key, &signature).is_ok();
 
         dbg!(verified);
 
