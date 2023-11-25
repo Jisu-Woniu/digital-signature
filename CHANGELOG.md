@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 ### Miscellaneous Tasks
 
 - :green_heart: Make the CI scripts more specific.
+- :see_no_evil: Ignore tsconfig.tsbuildinfo.
 
 ## [1.0.1] - 2023-11-25
 

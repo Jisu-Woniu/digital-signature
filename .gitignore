@@ -26,3 +26,5 @@ dist-ssr
 
 # Prevent Prettier from formatting Rust build artifact.
 /src-tauri/**/target/
+
+tsconfig.tsbuildinfo
