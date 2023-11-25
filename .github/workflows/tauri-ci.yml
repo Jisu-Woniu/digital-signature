@@ -3,8 +3,6 @@ on:
   push:
     branches:
       - main
-    tags:
-      - v*
   workflow_dispatch:
 
 jobs:
@@ -39,9 +37,9 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
-          tagName: v__VERSION__ # the action automatically replaces \_\_VERSION\_\_ with the app version
-          releaseName: "v__VERSION__"
-          releaseBody: "**Full Changelog**: https://github.com/Jisu-Woniu/digital-signature/commits/v__VERSION__"
+          tagName: v__VERSION__-unreleased # the action automatically replaces \_\_VERSION\_\_ with the app version
+          releaseName: "v__VERSION__-unreleased"
+          releaseBody: "**Full Changelog**: https://github.com/Jisu-Woniu/digital-signature/commits/main"
           releaseDraft: true
           prerelease: false
       - name: Upload Build Artifacts
