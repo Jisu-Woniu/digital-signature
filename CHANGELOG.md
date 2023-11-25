@@ -4,6 +4,12 @@ All notable changes to this project will be documented in this file.
 
 ## [unreleased]
 
+### Miscellaneous Tasks
+
+- :page_facing_up: Add MIT license.
+
+## [1.0.0] - 2023-11-24
+
 ### Bug Fixes
 
 - :green_heart: Specify pnpm version.
