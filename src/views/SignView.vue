@@ -51,14 +51,18 @@ const back = () => {
 const submit = async () => {
   if (valid.value) {
     if (step.value === items.value.length) {
-      const signatures = await signFiles(
-        data.filePaths,
-        data.keyPath,
-        data.passwd,
-      );
-      await message(
-        "签名成功。\n您的签名文件保存于：\n" + signatures.join("\n"),
-      );
+      try {
+        const signatures = await signFiles(
+          data.filePaths,
+          data.keyPath,
+          data.passwd,
+        );
+        await message(
+          "签名成功。\n您的签名文件保存于：\n" + signatures.join("\n"),
+        );
+      } catch (error) {
+        await message("校验失败，发生了以下错误：\n" + JSON.stringify(error));
+      }
     } else {
       step.value += 1;
     }

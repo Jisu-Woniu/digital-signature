@@ -30,12 +30,12 @@ const generate = async () => {
       );
       await message(
         "生成成功\n" +
-          `你的私钥路径为：${paths.secretKeyPath}\n` +
+          `您的私钥路径为：${paths.secretKeyPath}\n` +
           `公钥路径为：${paths.publicKeyPath}`,
       );
     }
   } catch (x) {
-    await message("生成失败\n发生如下错误：\n" + x);
+    await message("生成失败，发生了以下错误：\n" + x);
   }
 };
 </script>

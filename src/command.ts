@@ -21,7 +21,7 @@ export const generateKeyPair = (
 export const enum FileType {
   dir = 1,
   file = 0,
-  inexist = 3,
+  unavailable = 3,
   other = 2,
 }
 

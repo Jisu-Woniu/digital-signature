@@ -11,7 +11,7 @@ pub enum FileType {
     File = 0,
     Dir = 1,
     Other = 2,
-    Inexist = 3,
+    Unavailable = 3,
 }
 
 impl Serialize for FileType {
@@ -35,7 +35,7 @@ pub async fn detect_file_type(path: &Path) -> Result<FileType> {
                 FileType::Other
             }
         }
-        Err(_) => FileType::Inexist,
+        Err(_) => FileType::Unavailable,
     })
 }
 
@@ -45,22 +45,4 @@ pub fn get_file_names(files: Vec<&Path>) -> Vec<&OsStr> {
         .into_iter()
         .filter_map(|file| file.file_name())
         .collect()
-}
-
-#[cfg(test)]
-mod tests {
-    use std::path::PathBuf;
-
-    use super::detect_file_type;
-
-    #[tokio::test]
-    async fn test() {
-        println!("{:?}", detect_file_type(&PathBuf::from("/home/")).await);
-        println!("{:?}", detect_file_type(&PathBuf::from("/etc/fstab")).await);
-        println!(
-            "{:?}",
-            detect_file_type(&PathBuf::from("/home/inexist")).await
-        );
-        println!("{:?}", detect_file_type(&PathBuf::from("/bin/sh")).await);
-    }
 }

@@ -50,13 +50,20 @@ const back = () => {
 const submit = async () => {
   if (valid.value) {
     if (step.value === items.value.length) {
-      const results = await verifySignatures(data.signaturePaths, data.keyPath);
-      await message(
-        "校验成功\n" +
-          Object.keys(results)
-            .map((key) => `${key}: ${results[key] ? "✔️" : "❌"}`)
-            .join("\n"),
-      );
+      try {
+        const results = await verifySignatures(
+          data.signaturePaths,
+          data.keyPath,
+        );
+        await message(
+          "校验成功\n" +
+            Object.keys(results)
+              .map((key) => `${key}: ${results[key] ? "✔️" : "❌"}`)
+              .join("\n"),
+        );
+      } catch (error) {
+        await message("校验失败，发生了以下错误：\n" + JSON.stringify(error));
+      }
     } else {
       step.value += 1;
     }

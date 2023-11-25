@@ -36,7 +36,7 @@ fn sign(
     Ok(sig_conf.sign(secret_key, passwd_fn, data)?)
 }
 
-/// Sign the given file with the given secret key.
+/// Sign the given file with the specified secret key and password function.
 ///
 /// # Errors
 ///
@@ -70,11 +70,17 @@ where
     Ok(signature_path)
 }
 
-/// .
+/// Verify the given signature with the specified public key.
 ///
 /// # Errors
 ///
-/// This function will return an error if .
+/// This function will return an error if:
+/// - The file, signature or public key cannot be read.
+/// - The signature or public key's format is invalid.
+///
+/// However, these will not be considered an error, a `Ok(false)` is returned instead:
+/// - The signature is signed with a secret key having a key ID different from that of public key.
+/// - The file's hash does not match the one in signature.
 pub async fn verify_file_with_key<S, P>(signature_path: S, public_key_path: P) -> Result<bool>
 where
     S: AsRef<Path> + Send,
