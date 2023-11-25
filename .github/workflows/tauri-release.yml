@@ -1,4 +1,4 @@
-name: "Publish on new release"
+name: publish
 on:
   push:
     tags:

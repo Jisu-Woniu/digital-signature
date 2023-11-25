@@ -1,4 +1,4 @@
-name: "Test build on commit"
+name: test
 on:
   push:
     branches:
