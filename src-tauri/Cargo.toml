@@ -6,7 +6,7 @@ authors = ["Jisu-Woniu"]
 edition = "2021"
 license = "MIT"
 repository = "https://github.com/Jisu-Woniu/digital-signature/"
-version = "1.0.0"
+version = "1.0.1"
 
 [package]
 name = "digital-signature"
@@ -30,7 +30,7 @@ tokio = { version = "1.34.0", features = ["fs"] }
 
 [dependencies.digital-signature-crypto]
 path = "crypto"
-version = "1.0.0"
+version = "1.0.1"
 
 [dependencies.tauri]
 features = [

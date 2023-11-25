@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 ### Miscellaneous Tasks
 
 - :page_facing_up: Add MIT license.
+- :green_heart: Prevent overwriting build of previous releases.
 
 ## [1.0.0] - 2023-11-24
 
