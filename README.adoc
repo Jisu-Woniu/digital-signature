@@ -3,8 +3,11 @@
 :toc: preamble
 :toc-title: 目录
 
-https://github.com/Jisu-Woniu/digital-signature/actions/workflows/tauri.yml[
-    image:https://github.com/Jisu-Woniu/digital-signature/actions/workflows/tauri.yml/badge.svg[CI status]
+https://github.com/Jisu-Woniu/digital-signature/actions/workflows/tauri-ci.yml[
+    image:https://github.com/Jisu-Woniu/digital-signature/actions/workflows/tauri-ci.yml/badge.svg[CI status]
+]
+https://github.com/Jisu-Woniu/digital-signature/actions/workflows/tauri-release.yml[
+    image:https://github.com/Jisu-Woniu/digital-signature/actions/workflows/tauri-release.yml/badge.svg[CI status]
 ]
 
 使用 Tauri 开发的跨平台文件签名与校验工具。
