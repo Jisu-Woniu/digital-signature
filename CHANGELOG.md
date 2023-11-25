@@ -2,12 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
-## [unreleased]
+## [1.2.0] - 2023-11-25
 
 ### Miscellaneous Tasks
 
 - :construction_worker: Add cache to CI.
 - :construction_worker: Rename workflows.
+
+### Refactor
+
+- :lipstick: Refresh UI.
 
 ## [1.1.0] - 2023-11-25
 
