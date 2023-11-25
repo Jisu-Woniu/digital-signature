@@ -1,4 +1,4 @@
-name: "publish"
+name: "Test build on commit"
 on:
   push:
     branches:
@@ -8,16 +8,20 @@ on:
 jobs:
   publish-tauri:
     permissions:
-      contents: write
+      contents: read
     strategy:
       fail-fast: false
       matrix:
-        platform: [macos-latest, ubuntu-20.04, windows-latest]
+        platform:
+          - macos-latest
+          - ubuntu-20.04
+          - windows-latest
 
     runs-on: ${{ matrix.platform }}
     steps:
-      - uses: actions/checkout@v4
-      - name: Setup node
+      - name: Checkout repo
+        uses: actions/checkout@v4
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -26,22 +30,17 @@ jobs:
         with:
           version: latest
           run_install: true
-      - name: Install the Rust toolchain
+      - name: Setup Rust toolchain
         uses: dtolnay/rust-toolchain@stable
       - name: Install dependencies on Ubuntu
-        if: matrix.platform == 'ubuntu-20.04'
+        if: ${{ startsWith(matrix.platform, 'ubuntu') }}
         run: |
           sudo apt-get update && sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev libappindicator3-dev librsvg2-dev patchelf
       - id: tauri
+        name: Build Tauri app
         uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tagName: v__VERSION__-unreleased # the action automatically replaces \_\_VERSION\_\_ with the app version
-          releaseName: "v__VERSION__-unreleased"
-          releaseBody: "**Full Changelog**: https://github.com/Jisu-Woniu/digital-signature/commits/main"
-          releaseDraft: true
-          prerelease: false
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v3
         with:

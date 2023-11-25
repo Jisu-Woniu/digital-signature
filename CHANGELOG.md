@@ -6,6 +6,12 @@ All notable changes to this project will be documented in this file.
 
 ### Miscellaneous Tasks
 
+- :green_heart: Make the CI scripts more specific.
+
+## [1.0.1] - 2023-11-25
+
+### Miscellaneous Tasks
+
 - :page_facing_up: Add MIT license.
 - :green_heart: Prevent overwriting build of previous releases.
 
