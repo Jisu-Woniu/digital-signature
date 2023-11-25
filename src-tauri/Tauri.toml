@@ -14,8 +14,6 @@ version = "1.1.0"
 [tauri.allowlist]
 
 [tauri.allowlist.dialog]
-ask = true
-confirm = true
 message = true
 open = true
 

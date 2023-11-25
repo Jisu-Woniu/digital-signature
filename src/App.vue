@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import {
   VApp,
+  VAppBar,
+  VMain,
   VTab,
   VTabs,
-  VToolbar,
   VWindow,
   VWindowItem,
 } from "vuetify/components";
@@ -25,8 +26,10 @@ const tab = useSessionStorage("tab", Tab.sign);
 
 <template>
   <VApp>
-    <VToolbar title="签名工具">
-      <ColorSwitcher />
+    <VAppBar title="签名工具">
+      <template #append>
+        <ColorSwitcher />
+      </template>
       <template #extension>
         <VTabs v-model="tab" color="primary" align-tabs="center">
           <VTab :value="Tab.sign" :prepend-icon="mdiFileKey"> 签名 </VTab>
@@ -36,18 +39,19 @@ const tab = useSessionStorage("tab", Tab.sign);
           </VTab>
         </VTabs>
       </template>
-    </VToolbar>
-
-    <VWindow v-model="tab">
-      <VWindowItem :value="Tab.sign">
-        <SignView v-if="tab === Tab.sign" />
-      </VWindowItem>
-      <VWindowItem :value="Tab.validate">
-        <ValidateView v-if="tab === Tab.validate" />
-      </VWindowItem>
-      <VWindowItem :value="Tab.keygen">
-        <KeygenView v-if="tab === Tab.keygen" />
-      </VWindowItem>
-    </VWindow>
+    </VAppBar>
+    <VMain>
+      <VWindow v-model="tab">
+        <VWindowItem :value="Tab.sign">
+          <SignView v-if="tab === Tab.sign" />
+        </VWindowItem>
+        <VWindowItem :value="Tab.validate">
+          <ValidateView v-if="tab === Tab.validate" />
+        </VWindowItem>
+        <VWindowItem :value="Tab.keygen">
+          <KeygenView v-if="tab === Tab.keygen" />
+        </VWindowItem>
+      </VWindow>
+    </VMain>
   </VApp>
 </template>
