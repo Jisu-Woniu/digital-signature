@@ -8,8 +8,6 @@ All notable changes to this project will be documented in this file.
 
 - :goal_net: Checking for errors in frontend code.
 
-## [1.0.2] - 2023-11-25
-
 ### Miscellaneous Tasks
 
 - :green_heart: Make the CI scripts more specific.
