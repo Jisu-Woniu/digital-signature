@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+
+### Documentation
+
+- :memo: Add links in README.
+
 ## [1.2.0] - 2023-11-25
 
 ### Miscellaneous Tasks

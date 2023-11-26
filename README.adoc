@@ -10,11 +10,11 @@ https://github.com/Jisu-Woniu/digital-signature/actions/workflows/tauri-release.
     image:https://github.com/Jisu-Woniu/digital-signature/actions/workflows/tauri-release.yml/badge.svg[CI status]
 ]
 
-使用 Tauri 开发的跨平台文件签名与校验工具。
+使用 https://tauri.app/zh-cn/[Tauri] 开发的跨平台文件签名与校验工具。
 
 == 程序架构
 
-项目基于 Tauri 框架开发，这是一款使用 Rust 和 Web 技术开发跨平台桌面应用的框架。相比 Electron，Tauri 使用 Rust 语言编写后端，并使用系统 WebView 渲染前端，因而拥有更好的性能和更小的体积。
+项目基于 Tauri 框架开发，这是一款使用 Rust 和 Web 技术开发跨平台桌面应用的框架。相比 https://www.electronjs.org/zh/[Electron]，Tauri 使用 Rust 语言编写后端，并使用系统 WebView 渲染前端，因而拥有更高的性能和更小的体积。
 
 === 目录结构
 
@@ -33,23 +33,23 @@ https://github.com/Jisu-Woniu/digital-signature/actions/workflows/tauri-release.
 
 === 前端
 
-本项目使用 Vue 3 开发前端，使用 Vite 作为构建工具。
+本项目使用 https://cn.vuejs.org/[Vue 3] 开发前端，使用 https://cn.vitejs.dev/[Vite] 作为构建工具。
 
 Vue 是一款用于构建用户界面的渐进式框架，基于标准的 Web 技术栈开发，同时提供了一套声明式、组件化的编程模型。同时，Vue 在编译期间会对模板进行诸多优化，大大提升了其运行时的性能。
 
-Vite 是一款基于 ES Modules 的构建工具，使用 esbuild 和 Rollup 作为底层构建引擎。Vite 通过使用浏览器原生的 ES Modules 特性，实现了快速的冷启动和热更新，同时也提供了一些开发时的辅助功能，如高速的模块热替换（HMR）、代码分割等。
+Vite 是一款基于 ES Modules 的构建工具，使用 https://esbuild.github.io/[esbuild] 和 https://cn.rollupjs.org/[Rollup] 作为底层构建引擎。Vite 通过使用浏览器原生的 ES Modules 特性，实现了快速的冷启动和热更新，同时也提供了一些开发时的辅助功能，如高速的模块热替换（HMR）、代码分割等。
 
-用户界面主题使用了 Vuetify，这是一款基于 Vue 3 的 Material Design 组件库。
+用户界面主题使用了 https://vuetifyjs.com/zh-Hans/[Vuetify]，这是一款基于 Vue 3 的 Material Design 组件库。
 
-VueUse 项目提供了一些常用的 Vue Hooks，如 `useColorMode`、`useCycleList`、`useVModel` 等。
+https://vueuse.org/[VueUse] 项目提供了一些常用的 Vue Hooks，如 `useColorMode`、`useCycleList`、`useVModel` 等。
 
 === 后端
 
-本项目使用 Rust 开发后端。Rust 是一款系统编程语言，其拥有内存安全、并发安全等特性，同时也拥有极高的性能与庞大的生态系统。
+本项目使用 https://www.rust-lang.org/zh-CN/[Rust] 开发后端。Rust 是一款系统编程语言，其拥有内存安全、并发安全等特性，同时也拥有极高的性能与庞大的生态系统。
 
 Rust 语言具有强大的性能、友好的编译期提示，以及由所有权、生存期等机制从根本上保证的内存安全。同时，Rust 语言还提供了一套完善的工具链，包括包管理器 Cargo、代码检查工具 clippy 等，极大提升了开发效率。
 
-密码学函数部分借助了 rPGP 项目和 RustCrypto 项目，并封装在单独的 crate 中，以优化增量构建场景下的编译速度。
+密码学函数部分借助了 https://github.com/rpgp/rpgp[rPGP] 项目和 https://github.com/RustCrypto[RustCrypto] 项目，并封装在单独的 crate 中，以优化增量构建场景下的编译速度。
 
 rGPG 是一个纯 Rust 的 OpenPGP 实现，其提供了密钥生成、签名、加密、解密等功能。
 
