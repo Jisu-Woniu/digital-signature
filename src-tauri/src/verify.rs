@@ -1,6 +1,5 @@
 use std::{
     collections::HashMap,
-    iter::zip,
     path::{Path, PathBuf},
 };
 
@@ -19,7 +18,10 @@ pub async fn verify_signatures(
             .map(|sig_path| verify_file_with_key(sig_path, public_key_path)),
     )
     .await?;
-    Ok(zip(signature_paths, result).collect::<HashMap<PathBuf, bool>>())
+    Ok(signature_paths
+        .into_iter()
+        .zip(result)
+        .collect::<HashMap<PathBuf, bool>>())
 }
 
 #[cfg(test)]

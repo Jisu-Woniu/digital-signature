@@ -78,7 +78,7 @@ where
 /// - The file, signature or public key cannot be read.
 /// - The signature or public key's format is invalid.
 ///
-/// However, these will not be considered an error, a `Ok(false)` is returned instead:
+/// However, these will not be considered an error, an `Ok(false)` is returned instead:
 /// - The signature is signed with a secret key having a key ID different from that of public key.
 /// - The file's hash does not match the one in signature.
 pub async fn verify_file_with_key<S, P>(signature_path: S, public_key_path: P) -> Result<bool>
@@ -108,17 +108,8 @@ where
 #[cfg(test)]
 mod tests {
 
-    use pgp::{Signature, SignedPublicKey};
-    use temp_dir::TempDir;
-    use tokio::fs::write;
-
-    use super::{sign, sign_file_with_key};
-    use crate::{
-        from_file::FromFile,
-        key_pair::KeyPair,
-        keygen::{write_key_pair, KeyPairPaths},
-        Result,
-    };
+    use super::sign;
+    use crate::{key_pair::KeyPair, Result};
 
     #[test]
     fn test_sign() -> Result<()> {
@@ -140,42 +131,6 @@ mod tests {
                 .verify(&public_key, &b"Help"[..])
                 .expect_err("Should not pass")
         );
-        Ok(())
-    }
-
-    #[tokio::test]
-    async fn test_whole_process() -> Result<()> {
-        let tmp_dir = TempDir::new()?;
-        let KeyPairPaths {
-            secret_key_path,
-            public_key_path,
-        } = write_key_pair(
-            "example",
-            "example@example.com",
-            String::new,
-            tmp_dir.path(),
-        )
-        .await?;
-
-        dbg!(&secret_key_path);
-
-        let data = b"Hello, world!";
-
-        let data_path = tmp_dir.path().join("data");
-        write(&data_path, data).await?;
-        dbg!(&data_path);
-        let sig_path = sign_file_with_key(&data_path, &secret_key_path, String::new).await?;
-        dbg!(&sig_path);
-        let signature = Signature::try_from_file(sig_path).await?;
-        let public_key = SignedPublicKey::try_from_file(&public_key_path).await?;
-        dbg!(&public_key);
-
-        dbg!(&signature);
-
-        let verified = signature.verify(&public_key, &data[..]).is_ok(); //verify(data, &public_key, &signature).is_ok();
-
-        dbg!(verified);
-
         Ok(())
     }
 }

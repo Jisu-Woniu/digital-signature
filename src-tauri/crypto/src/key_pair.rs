@@ -7,12 +7,16 @@ use smallvec::smallvec;
 
 use crate::Result;
 
+/// Represent a generated key pair.
+///
+/// The key pair is already signed for usage.
 pub(crate) struct KeyPair {
     secret_key: SignedSecretKey,
     public_key: SignedPublicKey,
 }
 
 impl KeyPair {
+    /// Generate a [`KeyPair`] instance from the given name and email, and the password function.
     pub(crate) fn generate(
         name: &str,
         email: &str,
@@ -20,7 +24,6 @@ impl KeyPair {
     ) -> Result<Self> {
         let secret_key = SecretKeyParamsBuilder::default()
             // Set keygen params.
-            // TODO: Allow user to choose between RSA, EdDSA and more.
             .key_type(KeyType::EdDSA)
             .primary_user_id(format!("{} <{}>", name, email))
             .preferred_symmetric_algorithms(smallvec![

@@ -18,11 +18,12 @@ export const generateKeyPair = (
     path,
   });
 
+// Binary serialized, DO NOT CHANGE THE ORDER!
 export const enum FileType {
-  dir = 1,
   file = 0,
-  unavailable = 3,
+  dir = 1,
   other = 2,
+  unavailable = 3,
 }
 
 export const detectFileType = (path: string) =>

@@ -51,7 +51,7 @@ Rust 语言具有强大的性能、友好的编译期提示，以及由所有权
 
 密码学函数部分借助了 https://github.com/rpgp/rpgp[rPGP] 项目和 https://github.com/RustCrypto[RustCrypto] 项目，并封装在单独的 crate 中，以优化增量构建场景下的编译速度。
 
-rGPG 是一个纯 Rust 的 OpenPGP 实现，其提供了密钥生成、签名、加密、解密等功能。
+rPGP 是一个纯 Rust 的 OpenPGP 实现，其提供了密钥生成、签名、加密、解密等功能。
 
 RustCrypto 是一个 Rust 的密码学库，其提供了对称加密算法、非对称加密算法、数字签名算法、哈希函数、认证加密算法等多种密码学算法的实现。
 

@@ -5,6 +5,7 @@ use tokio::fs::metadata;
 
 use crate::error::Result;
 
+// Binary serialized, DO NOT CHANGE THE ORDER!
 #[repr(u8)]
 #[derive(Debug, Clone, Copy)]
 pub enum FileType {
