@@ -34,9 +34,6 @@ shortDescription = "A Tauri app for signing files."
 
 [tauri.bundle.windows]
 
-[tauri.bundle.windows.webviewInstallMode]
-type = "embedBootstrapper"
-
 [tauri.bundle.windows.nsis]
 displayLanguageSelector = true
 installMode = "both"
@@ -48,7 +45,6 @@ language = ["zh-CN", "en-US"]
 [[tauri.windows]]
 label = "main"
 title = "数字签名工具"
-
 fullscreen = false
 resizable = true
 width = 800

@@ -5,22 +5,17 @@ import postcssPresetEnv from "postcss-preset-env";
 import icons from "unplugin-icons/vite";
 import { defineConfig } from "vite";
 
-// https://vitejs.dev/config/
 export default defineConfig(async () => ({
   plugins: [vue(), icons({ compiler: "vue3" })],
 
-  // Vite options tailored for Tauri development and only applied in `tauri dev` or `tauri build`
-  //
-  // 1. prevent vite from obscuring rust errors
   clearScreen: false,
-  // 2. tauri expects a fixed port, fail if that port is not available
+
   server: {
     host: "127.0.0.1",
     port: 1420,
     strictPort: true,
   },
-  // 3. to make use of `TAURI_DEBUG` and other env variables
-  // https://tauri.app/v1/api/config#buildconfig.beforedevcommand
+
   envPrefix: [
     "VITE_",
     "TAURI_ARCH",
@@ -41,10 +36,13 @@ export default defineConfig(async () => ({
     },
   },
   build: {
-    // Tauri uses Chromium on Windows and WebKit on macOS and Linux
-    target: process.env.TAURI_PLATFORM == "windows" ? "chrome105" : "safari13",
+    // Tauri uses Edge on Windows and WebKit on macOS and Linux
+    target: process.env.TAURI_PLATFORM == "windows" ? "edge105" : "safari13",
     // produce sourcemaps for debug builds
     sourcemap: !!process.env.TAURI_DEBUG,
   },
-  define: { __VUE_OPTIONS_API__: false },
+  define: {
+    // Remove Vue Options API support for memory consumption.
+    __VUE_OPTIONS_API__: false,
+  },
 }));
