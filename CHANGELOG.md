@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file.
 
+## [unreleased]
+
+### Build
+
+- :zap: Remove Vue Options API support for space.
+
 ## [1.3.0] - 2023-12-07
 
 ### Documentation
