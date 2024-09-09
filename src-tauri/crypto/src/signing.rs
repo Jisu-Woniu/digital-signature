@@ -24,6 +24,7 @@ fn sign(
     let now = Utc::now();
     let sig_conf = SignatureConfigBuilder::default()
         .pub_alg(secret_key.algorithm())
+        .hash_alg(secret_key.hash_alg())
         .typ(SignatureType::Binary)
         .issuer(Some(secret_key.key_id()))
         .created(Some(now))
