@@ -59,13 +59,7 @@ where
     let signature = sign(file.into_std().await, &secret_key, passwd_fn)?;
     let mut signature_path = file_path.as_ref().to_owned();
     signature_path.as_mut_os_string().push(".sig");
-    let mut signature_file = File::options()
-        .create(true)
-        .write(true)
-        .open(&signature_path)
-        .await?
-        .into_std()
-        .await;
+    let mut signature_file = File::create(&signature_path).await?.into_std().await;
     packet::write_packet(&mut signature_file, &signature)?;
     Ok(signature_path)
 }

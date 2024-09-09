@@ -3,7 +3,7 @@
 use std::path::{Path, PathBuf};
 
 use futures::future::try_join;
-use pgp::types::KeyTrait;
+use pgp::{types::KeyTrait, ArmorOptions};
 use serde::Serialize;
 use tokio::fs::{write, DirBuilder};
 use zeroize::Zeroizing;
@@ -52,8 +52,9 @@ where
     let secret_key_path = path.join(format!("{}_0x{}_SECRET.asc", name, key_id));
     let public_key_path = path.join(format!("{}_0x{}_public.asc", name, key_id));
 
-    let secret_key_armored = Zeroizing::new(signed_secret_key.to_armored_bytes(None)?);
-    let public_key_armored = signed_public_key.to_armored_bytes(None)?;
+    let secret_key_armored =
+        Zeroizing::new(signed_secret_key.to_armored_bytes(ArmorOptions::default())?);
+    let public_key_armored = signed_public_key.to_armored_bytes(ArmorOptions::default())?;
 
     try_join(
         write_secret_file(&secret_key_path, &secret_key_armored),
@@ -70,7 +71,7 @@ where
 #[cfg(test)]
 mod tests {
 
-    use pgp::{types::KeyTrait, SignedSecretKey};
+    use pgp::{types::KeyTrait, ArmorOptions, SignedSecretKey};
 
     use crate::{from_file::FromFile, key_pair::KeyPair, Result};
 
@@ -78,8 +79,8 @@ mod tests {
     fn test() -> Result<()> {
         let key_pair = KeyPair::generate("example", "example@example.com", String::new)?;
         let (secret_key, public_key) = (key_pair.secret_key(), key_pair.public_key());
-        println!("{}", secret_key.to_armored_string(None)?);
-        println!("{}", public_key.to_armored_string(None)?);
+        println!("{}", secret_key.to_armored_string(ArmorOptions::default())?);
+        println!("{}", public_key.to_armored_string(ArmorOptions::default())?);
         dbg!(public_key);
         Ok(())
     }
@@ -88,7 +89,7 @@ mod tests {
     fn extract_key_info() -> Result<()> {
         let secret_key_str = KeyPair::generate("example", "example@example.com", String::new)?
             .secret_key()
-            .to_armored_bytes(None)?;
+            .to_armored_bytes(ArmorOptions::default())?;
 
         let secret_key = SignedSecretKey::try_from_armored_bytes(secret_key_str)?;
         dbg!(&secret_key);

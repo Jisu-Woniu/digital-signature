@@ -1,5 +1,5 @@
 use std::{
-    io::{BufReader, Cursor, Read, Seek},
+    io::{BufReader, Read, Seek},
     path::Path,
 };
 
@@ -9,28 +9,27 @@ use pgp::{
     packet::{Packet, PacketParser},
     Deserializable, Signature, SignedPublicKey, SignedSecretKey,
 };
-use tokio::{
-    fs::File,
-    io::{AsyncRead, AsyncSeek},
-};
-use tokio_util::io::SyncIoBridge;
+use tokio::fs::File;
 
 use crate::Result;
 
 #[async_trait]
 pub(crate) trait FromFile: Sized {
     fn try_from_reader(reader: impl Read + Seek + Send + Unpin) -> Result<Self>;
-    fn try_from_async_reader(
-        async_reader: impl AsyncRead + Send + Unpin + AsyncSeek,
-    ) -> Result<Self> {
-        Self::try_from_reader(SyncIoBridge::new(async_reader))
-    }
+    // fn try_from_async_reader(
+    //     async_reader: impl AsyncRead + Send + Unpin + AsyncSeek,
+    // ) -> Result<Self> {
+    //     Self::try_from_reader(SyncIoBridge::new(async_reader))
+    // }
     async fn try_from_file(path: impl AsRef<Path> + Send) -> Result<Self> {
         let file = File::open(path).await?.into_std().await;
         Ok(Self::try_from_reader(BufReader::new(file))?)
     }
 
+    #[cfg(test)]
     fn try_from_armored_bytes(bytes: impl AsRef<[u8]> + Send + Unpin) -> Result<Self> {
+        use std::io::Cursor;
+
         Self::try_from_reader(Cursor::new(bytes))
     }
 }
