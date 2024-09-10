@@ -18,7 +18,7 @@ repository.workspace = true
 version.workspace = true
 
 [build-dependencies]
-tauri-build = { version = "1.5.0", features = [] }
+tauri-build = { version = "1.5.4", features = [] }
 
 [dependencies]
 anyhow = { version = "1.0.87", features = ["backtrace"] }
