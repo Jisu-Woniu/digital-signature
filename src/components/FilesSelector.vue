@@ -3,22 +3,14 @@ import { onMounted, onUnmounted, ref } from "vue";
 import { VBtn, VCard, VDialog, VIcon } from "vuetify/components";
 import { TauriEvent, type UnlistenFn, listen } from "@tauri-apps/api/event";
 import { message, open } from "@tauri-apps/plugin-dialog";
-import { useVModel } from "@vueuse/core";
 import { FileType, detectFileType } from "@/command";
 import FolderOpen from "~icons/ic/twotone-folder-open";
 import Reject from "~icons/ic/twotone-highlight-off";
 import UploadFile from "~icons/ic/twotone-upload-file";
 
-const props = defineProps<{
-  modelValue: string[];
-  directory?: boolean;
-}>();
+const props = defineProps<{ directory?: boolean }>();
 
-const emits = defineEmits<{
-  (event: "update:modelValue", value: string[]): void;
-}>();
-
-const files = useVModel(props, "modelValue", emits);
+const files = defineModel<string[]>({ default: [] });
 
 const selectFiles = async () => {
   const selected = (await open({
@@ -35,41 +27,42 @@ let listeners: UnlistenFn[];
 
 const checkFilesType = async (paths: string[]) => {
   const expectedType = props.directory ? FileType.dir : FileType.file;
-  return (await Promise.all(paths.map(detectFileType))).every(
-    (fileType) => fileType === expectedType,
+  return (
+    paths.length !== 0 &&
+    (await Promise.all(paths.map(detectFileType))).every(
+      (fileType) => fileType === expectedType,
+    )
   );
 };
 
 onMounted(async () => {
   listeners = await Promise.all([
-    listen<string[]>(TauriEvent.WINDOW_FILE_DROP_HOVER, async (e) => {
+    listen<{ paths: string[] }>(TauriEvent.DRAG_ENTER, async (e) => {
       hover.value = true;
-      const payload = e.payload;
-      hover_accept.value =
-        payload.length != 0 && (await checkFilesType(payload));
+      console.log("DRAG_ENTER", e.payload);
+      hover_accept.value = await checkFilesType(e.payload.paths);
     }),
-    listen<string[]>(TauriEvent.WINDOW_FILE_DROP, async (e) => {
-      console.info("DROPPED!!!");
-      const payload = e.payload;
-      if (payload.length == 0 || !(await checkFilesType(payload)))
+    listen<{ paths: string[] }>(TauriEvent.DRAG_DROP, async (e) => {
+      console.log("DRAG_DROP", e.payload);
+      if (!(await checkFilesType(e.payload.paths)))
         await message(props.directory ? "只支持文件夹" : "只支持文件");
-      else files.value = payload;
-      hover_accept.value = true;
-      hover.value = false;
+      else files.value = e.payload.paths;
+      hover_accept.value = hover.value = false;
     }),
-    listen<void>(TauriEvent.WINDOW_FILE_DROP_CANCELLED, () => {
-      hover_accept.value = true;
-      hover.value = false;
+    listen<unknown>(TauriEvent.DRAG_LEAVE, async (e) => {
+      console.log("DRAG_LEAVE", e.payload);
+      hover.value = hover_accept.value = false;
     }),
-    listen<void>(TauriEvent.WINDOW_BLUR, () => {
-      hover_accept.value = true;
-      hover.value = false;
+    listen<void>(TauriEvent.WINDOW_BLUR, async (e) => {
+      console.log("WINDOW_BLUR", e.payload);
+      hover.value = hover_accept.value = false;
     }),
   ]);
 });
 
 onUnmounted(() => {
-  listeners.forEach((unlisten) => unlisten());
+  for (const unlistenFn of listeners) unlistenFn();
+
   listeners = [];
 });
 </script>
