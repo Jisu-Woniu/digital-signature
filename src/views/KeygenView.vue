@@ -2,7 +2,7 @@
 import { ref } from "vue";
 import { VBtn, VContainer, VForm, VTextField } from "vuetify/components";
 import { mdiCheck } from "@mdi/js";
-import { message } from "@tauri-apps/api/dialog";
+import { message } from "@tauri-apps/plugin-dialog";
 import FileSelector from "@/components/FileSelector.vue";
 import { generateKeyPair } from "@/command";
 import FolderOpen from "~icons/ic/twotone-folder-open";

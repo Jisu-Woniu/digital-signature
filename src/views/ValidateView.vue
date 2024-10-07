@@ -14,7 +14,7 @@ import FileSelector from "@/components/FileSelector.vue";
 import FilesSelector from "@/components/FilesSelector.vue";
 import { verifySignatures } from "@/command";
 import FolderOpen from "~icons/ic/twotone-folder-open";
-import { message } from "@tauri-apps/api/dialog";
+import { message } from "@tauri-apps/plugin-dialog";
 
 const rules = {
   required: (value: string | string[] | undefined) => !!value?.length || "必填",

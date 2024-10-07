@@ -18,31 +18,20 @@ repository.workspace = true
 version.workspace = true
 
 [build-dependencies]
-tauri-build = { version = "1.5.4", features = [] }
+tauri-build = { version = "2", features = [] }
 
 [dependencies]
 anyhow = { version = "1.0.87", features = ["backtrace"] }
 digital-signature-crypto = { path = "crypto" }
-futures = "0.3.30"
-serde = { version = "1.0.210", features = ["derive"] }
-serde_json = "1.0.128"
+futures = "0.3.29"
+serde = { version = "1.0.193", features = ["derive"] }
+serde_json = "1.0.108"
+tauri = { version = "2.0.1", features = ["config-toml"] }
+tauri-plugin-dialog = "2.0.1"
 tokio = { version = "1.40.0", features = ["fs"] }
 
-[dependencies.tauri]
-features = [
-  "config-toml",
-  "dialog-message",
-  "dialog-open",
-  "icon-ico",
-  "icon-png",
-]
-version = "1.7.2"
-
 [dev-dependencies]
-
-[dev-dependencies.tokio]
-features = ["macros", "rt-multi-thread"]
-version = "1.40.0"
+tokio = { version = "1.40.0", features = ["macros", "rt-multi-thread"] }
 
 [features]
 # this feature is used for production builds or when `devPath` points to the filesystem

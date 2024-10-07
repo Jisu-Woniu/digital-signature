@@ -2,7 +2,7 @@
 import { onMounted, onUnmounted, ref } from "vue";
 import { VBtn, VCard, VDialog, VIcon } from "vuetify/components";
 import { TauriEvent, type UnlistenFn, listen } from "@tauri-apps/api/event";
-import { message, open } from "@tauri-apps/api/dialog";
+import { message, open } from "@tauri-apps/plugin-dialog";
 import { useVModel } from "@vueuse/core";
 import { FileType, detectFileType } from "@/command";
 import FolderOpen from "~icons/ic/twotone-folder-open";

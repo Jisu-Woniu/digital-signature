@@ -16,6 +16,7 @@ mod verify;
 
 fn main() -> anyhow::Result<()> {
     tauri::Builder::default()
+        .plugin(tauri_plugin_dialog::init())
         .invoke_handler(tauri::generate_handler![
             generate_key_pair,
             detect_file_type,
