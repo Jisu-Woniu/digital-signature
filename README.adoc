@@ -41,7 +41,7 @@ Vite 是一款基于 ES Modules 的构建工具，使用 https://esbuild.github.
 
 用户界面主题使用了 https://vuetifyjs.com/zh-Hans/[Vuetify]，这是一款基于 Vue 3 的 Material Design 组件库。
 
-https://vueuse.org/[VueUse] 项目提供了一些常用的 Vue Hooks，如 `useColorMode`、`useCycleList`、`useVModel` 等。
+https://vueuse.org/[VueUse] 项目提供了一些常用的 Vue Hooks，如 `useColorMode`、`useCycleList` 等。
 
 === 后端
 
@@ -59,9 +59,9 @@ RustCrypto 是一个 Rust 的密码学库，其提供了对称加密算法、非
 
 === 构建工具
 
-* Node.js 18+
-* Rust stable v1.73.0+
-* pnpm 8+
+* Node.js 20+
+* Rust stable v1.77+
+* pnpm 9+
 
 === 推荐的开发工具
 

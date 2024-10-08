@@ -16,15 +16,7 @@ export default defineConfig(async () => ({
     strictPort: true,
   },
 
-  envPrefix: [
-    "VITE_",
-    "TAURI_ARCH",
-    "TAURI_FAMILY",
-    "TAURI_PLATFORM",
-    "TAURI_PLATFORM_TYPE",
-    "TAURI_PLATFORM_VERSION",
-    "TAURI_DEBUG",
-  ],
+  envPrefix: ["VITE_", "TAURI_ENV_*"],
   css: {
     postcss: {
       plugins: [postcssPresetEnv, autoPrefixer],
@@ -37,9 +29,12 @@ export default defineConfig(async () => ({
   },
   build: {
     // Tauri uses Edge on Windows and WebKit on macOS and Linux
-    target: process.env.TAURI_PLATFORM == "windows" ? "edge105" : "safari13",
+    target:
+      process.env.TAURI_ENV_PLATFORM === "windows" ? "edge105" : "safari13",
+    // don't minify for debug builds
+    minify: !process.env.TAURI_ENV_DEBUG ? "esbuild" : false,
     // produce sourcemaps for debug builds
-    sourcemap: !!process.env.TAURI_DEBUG,
+    sourcemap: !!process.env.TAURI_ENV_DEBUG,
   },
   define: {
     // Remove Vue Options API support for memory consumption.
