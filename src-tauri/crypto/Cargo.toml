@@ -8,14 +8,14 @@ repository.workspace = true
 version.workspace = true
 
 [dependencies]
-async-trait = "0.1.82"
+async-trait = "0.1.83"
 chrono = "0.4.38"
-futures = "0.3.30"
+futures = "0.3.31"
 hex = "0.4.3"
 pgp = "0.13.2"
 serde = { version = "1.0.210", features = ["derive"] }
 smallvec = "1.13.2"
-thiserror = "1.0.63"
+thiserror = "1.0.64"
 tokio-util = { version = "0.7.12", features = ["io-util"] }
 zeroize = "1.8.1"
 
@@ -24,7 +24,7 @@ features = ["fs", "io-util"]
 version = "1.40.0"
 
 [dev-dependencies]
-temp-dir = "0.1.13"
+temp-dir = "0.1.14"
 
 [dev-dependencies.tokio]
 features = ["macros", "rt-multi-thread"]
