@@ -3,7 +3,7 @@
 use std::path::{Path, PathBuf};
 
 use futures::future::try_join;
-use pgp::{types::KeyTrait, ArmorOptions};
+use pgp::{types::PublicKeyTrait as _, ArmorOptions};
 use serde::Serialize;
 use tokio::fs::{write, DirBuilder};
 use zeroize::Zeroizing;
@@ -71,7 +71,7 @@ where
 #[cfg(test)]
 mod tests {
 
-    use pgp::{types::KeyTrait, ArmorOptions, SignedSecretKey};
+    use pgp::{types::PublicKeyTrait as _, ArmorOptions, SignedSecretKey};
 
     use crate::{from_file::FromFile, key_pair::KeyPair, Result};
 

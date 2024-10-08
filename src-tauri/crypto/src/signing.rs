@@ -7,7 +7,7 @@ use std::{
 
 use chrono::Utc;
 use pgp::{
-    packet::{self, SignatureConfigBuilder, SignatureType, Subpacket, SubpacketData},
+    packet::{self, SignatureConfig, SignatureType, Subpacket, SubpacketData},
     types::SecretKeyTrait,
     Signature, SignedPublicKey, SignedSecretKey,
 };
@@ -22,18 +22,18 @@ fn sign(
     passwd_fn: impl FnOnce() -> String + Clone,
 ) -> Result<Signature> {
     let now = Utc::now();
-    let sig_conf = SignatureConfigBuilder::default()
-        .pub_alg(secret_key.algorithm())
-        .hash_alg(secret_key.hash_alg())
-        .typ(SignatureType::Binary)
-        .issuer(Some(secret_key.key_id()))
-        .created(Some(now))
-        .hashed_subpackets(vec![
-            Subpacket::regular(SubpacketData::SignatureCreationTime(now)),
-            Subpacket::regular(SubpacketData::Issuer(secret_key.key_id())),
-        ])
-        .unhashed_subpackets(vec![])
-        .build()?;
+
+    let mut sig_conf = SignatureConfig::v4(
+        SignatureType::Binary,
+        secret_key.algorithm(),
+        secret_key.hash_alg(),
+    );
+
+    sig_conf.hashed_subpackets = vec![
+        Subpacket::regular(SubpacketData::SignatureCreationTime(now)),
+        Subpacket::regular(SubpacketData::Issuer(secret_key.key_id())),
+    ];
+
     Ok(sig_conf.sign(secret_key, passwd_fn, data)?)
 }
 

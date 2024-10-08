@@ -3,6 +3,7 @@ use pgp::{
     types::{CompressionAlgorithm, SecretKeyTrait as _},
     KeyType, SecretKeyParamsBuilder, SignedPublicKey, SignedSecretKey,
 };
+use rand::thread_rng;
 use smallvec::smallvec;
 
 use crate::Result;
@@ -24,7 +25,7 @@ impl KeyPair {
     ) -> Result<Self> {
         let secret_key = SecretKeyParamsBuilder::default()
             // Set keygen params.
-            .key_type(KeyType::EdDSA)
+            .key_type(KeyType::Ed25519)
             .primary_user_id(format!("{} <{}>", name, email))
             .preferred_symmetric_algorithms(smallvec![
                 SymmetricKeyAlgorithm::AES256,
@@ -47,10 +48,10 @@ impl KeyPair {
             .can_sign(true)
             .build()
             .expect("msg")
-            .generate()?;
-        let signed_secret_key = secret_key.sign(passwd_fn.clone())?;
+            .generate(thread_rng())?;
+        let signed_secret_key = secret_key.sign(thread_rng(), passwd_fn.clone())?;
         let public_key = signed_secret_key.public_key();
-        let signed_public_key = public_key.sign(&signed_secret_key, passwd_fn)?;
+        let signed_public_key = public_key.sign(thread_rng(), &signed_secret_key, passwd_fn)?;
 
         Ok(KeyPair::from_keys(signed_secret_key, signed_public_key))
     }
