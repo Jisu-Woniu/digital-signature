@@ -19,7 +19,7 @@ export const generateKeyPair = (
   });
 
 // Binary serialized, DO NOT CHANGE THE ORDER!
-export const enum FileType {
+export enum FileType {
   file = 0,
   dir = 1,
   other = 2,

@@ -15,10 +15,10 @@ import { mdiFileCheck, mdiFileKey, mdiKeyChain } from "@mdi/js";
 import { useSessionStorage } from "@vueuse/core";
 import ColorSwitcher from "@/components/ColorSwitcher.vue";
 
-const enum Tab {
-  sign,
-  validate,
-  keygen,
+enum Tab {
+  sign = 0,
+  validate = 1,
+  keygen = 2,
 }
 
 const tab = useSessionStorage("tab", Tab.sign);
