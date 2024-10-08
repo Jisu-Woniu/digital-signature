@@ -46,6 +46,13 @@ jobs:
           targets: ${{ startsWith(matrix.platform, 'macos') && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Run sccache
+        uses: mozilla-actions/sccache-action@v0.0.6
+      - name: Enable sccache for Rust
+        shell: bash
+        run: |
+          echo SCCACHE_GHA_ENABLED=true >> "$GITHUB_ENV"
+          echo RUSTC_WRAPPER=sccache >> "$GITHUB_ENV"
       - name: Install dependencies on Ubuntu
         if: ${{ startsWith(matrix.platform, 'ubuntu') }}
         run: |
