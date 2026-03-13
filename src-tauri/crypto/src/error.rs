@@ -1,6 +1,6 @@
 //! Error types wrapper
 
-use std::io;
+use std::{io, string::FromUtf8Error};
 
 use thiserror::Error;
 
@@ -8,6 +8,9 @@ use thiserror::Error;
 #[derive(Debug, Error)]
 #[non_exhaustive]
 pub enum Error {
+    /// Error propagated from [`io::Error`]
+    #[error("Error decoding UTF-8 string: {0}")]
+    Utf8(#[from] FromUtf8Error),
     /// Error propagated from [`io::Error`]
     #[error("IO error: {0}")]
     Io(#[from] io::Error),

@@ -12,8 +12,8 @@ pub use error::{Error, Result};
 
 #[cfg(test)]
 mod tests {
-    use pgp::{Signature, SignedPublicKey};
-    use temp_dir::TempDir;
+    use pgp::{composed::SignedPublicKey, packet::Signature, types::Password};
+    use tempfile::tempdir;
     use tokio::fs::write;
 
     use crate::{
@@ -25,24 +25,18 @@ mod tests {
 
     #[tokio::test]
     async fn test_whole_process() -> Result<()> {
-        let tmp_dir = TempDir::new()?;
+        let tmp_dir = tempdir()?;
         let KeyPairPaths {
             secret_key_path,
             public_key_path,
-        } = write_key_pair(
-            "example",
-            "example@example.com",
-            String::new,
-            tmp_dir.path(),
-        )
-        .await?;
+        } = write_key_pair("example", "example@example.com", "", tmp_dir.path()).await?;
 
         let data = b"Hello, world!";
         let data_path = tmp_dir.path().join("data");
 
         write(&data_path, data).await?;
 
-        let sig_path = sign_file_with_key(&data_path, &secret_key_path, String::new).await?;
+        let sig_path = sign_file_with_key(&data_path, &secret_key_path, &Password::empty()).await?;
 
         let signature = Signature::try_from_file(sig_path).await?;
         let public_key = SignedPublicKey::try_from_file(&public_key_path).await?;
