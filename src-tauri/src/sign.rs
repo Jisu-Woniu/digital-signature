@@ -11,10 +11,11 @@ pub async fn sign_files(
     private_key_path: &Path,
     passwd: &str,
 ) -> Result<Vec<PathBuf>> {
+    let passwd = passwd.into();
     Ok(try_join_all(
-        file_paths.into_iter().map(|file_path| {
-            sign_file_with_key(file_path, private_key_path, || String::from(passwd))
-        }),
+        file_paths
+            .into_iter()
+            .map(|file_path| sign_file_with_key(file_path, private_key_path, &passwd)),
     )
     .await?)
 }

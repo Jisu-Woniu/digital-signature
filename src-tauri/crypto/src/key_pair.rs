@@ -1,7 +1,7 @@
 use pgp::{
+    composed::{KeyType, SecretKeyParamsBuilder, SignedPublicKey, SignedSecretKey},
     crypto::{hash::HashAlgorithm, sym::SymmetricKeyAlgorithm},
-    types::{CompressionAlgorithm, SecretKeyTrait as _},
-    KeyType, SecretKeyParamsBuilder, SignedPublicKey, SignedSecretKey,
+    types::CompressionAlgorithm,
 };
 use rand::thread_rng;
 use smallvec::smallvec;
@@ -18,12 +18,8 @@ pub(crate) struct KeyPair {
 
 impl KeyPair {
     /// Generate a [`KeyPair`] instance from the given name and email, and the password function.
-    pub(crate) fn generate(
-        name: &str,
-        email: &str,
-        passwd_fn: impl FnOnce() -> String + Clone,
-    ) -> Result<Self> {
-        let secret_key = SecretKeyParamsBuilder::default()
+    pub(crate) fn generate(name: &str, email: &str, passwd_str: &str) -> Result<Self> {
+        let signed_secret_key = SecretKeyParamsBuilder::default()
             // Set keygen params.
             .key_type(KeyType::Ed25519)
             .primary_user_id(format!("{} <{}>", name, email))
@@ -34,24 +30,23 @@ impl KeyPair {
                 SymmetricKeyAlgorithm::TripleDES,
             ])
             .preferred_hash_algorithms(smallvec![
-                HashAlgorithm::SHA2_512,
-                HashAlgorithm::SHA2_384,
-                HashAlgorithm::SHA2_256,
-                HashAlgorithm::SHA2_224,
-                HashAlgorithm::SHA1
+                HashAlgorithm::Sha512,
+                HashAlgorithm::Sha384,
+                HashAlgorithm::Sha256,
+                HashAlgorithm::Sha224,
+                HashAlgorithm::Sha1,
             ])
             .preferred_compression_algorithms(smallvec![
                 CompressionAlgorithm::ZLIB,
                 CompressionAlgorithm::BZip2,
                 CompressionAlgorithm::ZIP
             ])
+            .passphrase(Some(passwd_str.to_string()))
             .can_sign(true)
             .build()
-            .expect("msg")
+            .expect("Failed to build secret key parameters")
             .generate(thread_rng())?;
-        let signed_secret_key = secret_key.sign(thread_rng(), passwd_fn.clone())?;
-        let public_key = signed_secret_key.public_key();
-        let signed_public_key = public_key.sign(thread_rng(), &signed_secret_key, passwd_fn)?;
+        let signed_public_key = signed_secret_key.to_public_key();
 
         Ok(KeyPair::from_keys(signed_secret_key, signed_public_key))
     }

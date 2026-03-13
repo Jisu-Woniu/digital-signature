@@ -13,5 +13,5 @@ pub async fn generate_key_pair(
     passwd: &str,
     path: &Path,
 ) -> Result<KeyPairPaths> {
-    Ok(write_key_pair(name, email, || String::from(passwd), path).await?)
+    Ok(write_key_pair(name, email, passwd, path).await?)
 }

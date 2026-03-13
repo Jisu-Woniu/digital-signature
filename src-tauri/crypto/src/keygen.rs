@@ -3,7 +3,7 @@
 use std::path::{Path, PathBuf};
 
 use futures::future::try_join;
-use pgp::{types::PublicKeyTrait as _, ArmorOptions};
+use pgp::{composed::ArmorOptions, types::KeyDetails};
 use serde::Serialize;
 use tokio::fs::{write, DirBuilder};
 use zeroize::Zeroizing;
@@ -30,24 +30,21 @@ pub struct KeyPairPaths {
 /// - The destination directory cannot be created.
 /// - Cannot generate key pair properly.
 /// - Failed to write generated key pair.
-pub async fn write_key_pair<F>(
+pub async fn write_key_pair(
     name: &str,
     email: &str,
-    passwd_fn: F,
+    passwd: &str,
     path: impl AsRef<Path>,
-) -> Result<KeyPairPaths>
-where
-    F: FnOnce() -> String + Clone,
-{
+) -> Result<KeyPairPaths> {
     let path = path.as_ref();
 
     // Create output directory if not exist.
     DirBuilder::new().recursive(true).create(path).await?;
 
-    let key_pair = KeyPair::generate(name, email, passwd_fn)?;
+    let key_pair = KeyPair::generate(name, email, passwd)?;
     let signed_secret_key = key_pair.secret_key();
     let signed_public_key = key_pair.public_key();
-    let key_id = &hex::encode_upper(&signed_secret_key.key_id().as_ref()[4..]);
+    let key_id = &hex::encode_upper(&signed_secret_key.legacy_key_id().as_ref()[4..]);
 
     let secret_key_path = path.join(format!("{}_0x{}_SECRET.asc", name, key_id));
     let public_key_path = path.join(format!("{}_0x{}_public.asc", name, key_id));
@@ -71,13 +68,16 @@ where
 #[cfg(test)]
 mod tests {
 
-    use pgp::{types::PublicKeyTrait as _, ArmorOptions, SignedSecretKey};
+    use pgp::{
+        composed::{ArmorOptions, SignedSecretKey},
+        types::KeyDetails,
+    };
 
     use crate::{from_file::FromFile, key_pair::KeyPair, Result};
 
     #[test]
     fn test() -> Result<()> {
-        let key_pair = KeyPair::generate("example", "example@example.com", String::new)?;
+        let key_pair = KeyPair::generate("example", "example@example.com", "")?;
         let (secret_key, public_key) = (key_pair.secret_key(), key_pair.public_key());
         println!("{}", secret_key.to_armored_string(ArmorOptions::default())?);
         println!("{}", public_key.to_armored_string(ArmorOptions::default())?);
@@ -87,13 +87,13 @@ mod tests {
 
     #[test]
     fn extract_key_info() -> Result<()> {
-        let secret_key_str = KeyPair::generate("example", "example@example.com", String::new)?
+        let secret_key_str = KeyPair::generate("example", "example@example.com", "")?
             .secret_key()
             .to_armored_bytes(ArmorOptions::default())?;
 
         let secret_key = SignedSecretKey::try_from_armored_bytes(secret_key_str)?;
         dbg!(&secret_key);
-        let key_id = secret_key.key_id();
+        let key_id = secret_key.legacy_key_id();
         dbg!(&key_id);
         dbg!(&hex::encode_upper(&key_id.as_ref()[4..]));
         Ok(())
