@@ -29,11 +29,11 @@ jobs:
     runs-on: ${{ matrix.platform }}
     steps:
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
       - name: Install pnpm
-        uses: pnpm/action-setup@v4.0.0
+        uses: pnpm/action-setup@v4.4.0
       - name: Setup Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
           node-version: lts/*
           cache: pnpm
@@ -72,7 +72,7 @@ jobs:
           releaseDraft: true
           prerelease: false
       - name: Upload Build Artifacts
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: artifacts-${{ matrix.target }}
           path: ${{ join(fromJson(steps.tauri.outputs.artifactPaths), fromJson('"\n"')) }}
