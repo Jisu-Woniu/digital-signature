@@ -36,8 +36,6 @@
     "@vue/eslint-config-prettier": "^10.2.0",
     "@vue/eslint-config-typescript": "^14.7.0",
     "@vue/tsconfig": "^0.9.0",
-    "autoprefixer": "^10.4.27",
-    "browserslist": "^4.28.1",
     "eslint": "^10.0.3",
     "eslint-plugin-vue": "^10.8.0",
     "npm-run-all2": "^8.0.4",
@@ -52,11 +50,7 @@
     "typescript": "^5.9.3",
     "unplugin-icons": "^23.0.1",
     "vite": "^8.0.0",
-    "vue-tsc": "https://pkg.pr.new/vuejs/language-tools/vue-tsc@3fb59af"
+    "vue-tsc": "^3.2.5"
   },
-  "browserslist": [
-    "edge >= 105",
-    "safari >= 13"
-  ],
   "packageManager": "pnpm@10.32.1+sha512.a706938f0e89ac1456b6563eab4edf1d1faf3368d1191fc5c59790e96dc918e4456ab2e67d613de1043d2e8c81f87303e6b40d4ffeca9df15ef1ad567348f2be"
 }
