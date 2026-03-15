@@ -34,7 +34,6 @@ const checkFileType = async (paths: string[]) => {
 
 onMounted(() =>
   Promise.all([
-    /* eslint-disable @typescript-eslint/require-await */
     useTauriEvent<{ paths: string[] }>(TauriEvent.DRAG_ENTER, async (e) => {
       hover.value = true;
       console.log("DRAG_ENTER", e.payload);
@@ -47,15 +46,14 @@ onMounted(() =>
       else file.value = e.payload.paths[0];
       hover.value = hover_accept.value = false;
     }),
-    useTauriEvent(TauriEvent.DRAG_LEAVE, async (e) => {
+    useTauriEvent(TauriEvent.DRAG_LEAVE, (e) => {
       console.log("DRAG_LEAVE", e.payload);
       hover.value = hover_accept.value = false;
     }),
-    useTauriEvent(TauriEvent.WINDOW_BLUR, async (e) => {
+    useTauriEvent(TauriEvent.WINDOW_BLUR, (e) => {
       console.log("WINDOW_BLUR", e.payload);
       hover.value = hover_accept.value = false;
     }),
-    /* eslint-enable @typescript-eslint/require-await */
   ]),
 );
 </script>
