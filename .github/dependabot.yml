@@ -19,5 +19,5 @@ updates:
       interval: "daily"
     groups:
       gh-action:
-        patterns: "*"
-        
+        patterns:
+          - "*"
