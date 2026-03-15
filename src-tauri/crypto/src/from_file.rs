@@ -20,7 +20,7 @@ pub(crate) trait FromFile: Sized {
     // ) -> Result<Self> {
     //     Self::try_from_reader(SyncIoBridge::new(async_reader))
     // }
-    fn try_from_file(path: impl AsRef<Path> + Send) -> impl Future<Output = Result<Self>> {
+    fn try_from_file(path: impl AsRef<Path> + Send) -> impl Future<Output = Result<Self>> + Send {
         async move {
             let file = File::open(path).await?.into_std().await;
             Ok(Self::try_from_reader(BufReader::new(file))?)
