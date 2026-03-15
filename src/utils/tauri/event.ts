@@ -1,17 +1,5 @@
-import {
-  listen,
-  type EventCallback,
-  type EventName,
-  type Options,
-} from "@tauri-apps/api/event";
-import { tryOnScopeDispose } from "@vueuse/core";
+import { listen } from "@tauri-apps/api/event";
+import { onScopeDispose } from "vue";
 
-export async function useTauriEvent<T>(
-  e: EventName,
-  handler: EventCallback<T>,
-  options?: Options,
-) {
-  const unlisten = await listen(e, handler, options);
-
-  tryOnScopeDispose(unlisten);
-}
+export const useTauriEvent = async <T>(...args: Parameters<typeof listen<T>>) =>
+  onScopeDispose(await listen<T>(...args));

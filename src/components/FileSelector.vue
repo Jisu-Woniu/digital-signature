@@ -1,29 +1,28 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref } from "vue";
+import { onMounted, ref } from "vue";
 import { VBtn, VCard, VDialog, VIcon } from "vuetify/components";
-import { TauriEvent, type UnlistenFn, listen } from "@tauri-apps/api/event";
+import { TauriEvent } from "@tauri-apps/api/event";
 import { message, open } from "@tauri-apps/plugin-dialog";
-import { FileType, detectFileType } from "@/command";
+import { FileType, detectFileType } from "../command";
 import FolderOpen from "~icons/ic/twotone-folder-open";
 import Reject from "~icons/ic/twotone-highlight-off";
 import UploadFile from "~icons/ic/twotone-upload-file";
+import { useTauriEvent } from "../utils";
 
 const props = defineProps<{ directory?: boolean }>();
 
 const file = defineModel<string>();
 
 const selectFile = async () => {
-  const selected = (await open({
+  const selected = await open({
     multiple: false,
     directory: props.directory,
-  })) as string | null;
+  });
   file.value = selected ?? undefined;
 };
 
 const hover = ref(false);
 const hover_accept = ref(false);
-
-let listeners: UnlistenFn[];
 
 const checkFileType = async (paths: string[]) => {
   return (
@@ -33,36 +32,32 @@ const checkFileType = async (paths: string[]) => {
   );
 };
 
-onMounted(async () => {
-  listeners = await Promise.all([
-    listen<{ paths: string[] }>(TauriEvent.DRAG_ENTER, async (e) => {
+onMounted(() =>
+  Promise.all([
+    /* eslint-disable @typescript-eslint/require-await */
+    useTauriEvent<{ paths: string[] }>(TauriEvent.DRAG_ENTER, async (e) => {
       hover.value = true;
       console.log("DRAG_ENTER", e.payload);
       hover_accept.value = await checkFileType(e.payload.paths);
     }),
-    listen<{ paths: string[] }>(TauriEvent.DRAG_DROP, async (e) => {
+    useTauriEvent<{ paths: string[] }>(TauriEvent.DRAG_DROP, async (e) => {
       console.log("DRAG_DROP", e.payload);
       if (!(await checkFileType(e.payload.paths)))
         await message(props.directory ? "请选择一个文件夹" : "请选择一个文件");
       else file.value = e.payload.paths[0];
       hover.value = hover_accept.value = false;
     }),
-    listen<unknown>(TauriEvent.DRAG_LEAVE, async (e) => {
+    useTauriEvent(TauriEvent.DRAG_LEAVE, async (e) => {
       console.log("DRAG_LEAVE", e.payload);
       hover.value = hover_accept.value = false;
     }),
-    listen<void>(TauriEvent.WINDOW_BLUR, async (e) => {
+    useTauriEvent(TauriEvent.WINDOW_BLUR, async (e) => {
       console.log("WINDOW_BLUR", e.payload);
       hover.value = hover_accept.value = false;
     }),
-  ]);
-});
-
-onUnmounted(() => {
-  for (const unlistenFn of listeners) unlistenFn();
-
-  listeners = [];
-});
+    /* eslint-enable @typescript-eslint/require-await */
+  ]),
+);
 </script>
 <template>
   <slot :select-file="selectFile">

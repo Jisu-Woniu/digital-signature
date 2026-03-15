@@ -4,7 +4,7 @@ import { VBtn, VCard, VDialog, VIcon } from "vuetify/components";
 import { TauriEvent } from "@tauri-apps/api/event";
 import { useTauriEvent } from "../utils";
 import { message, open } from "@tauri-apps/plugin-dialog";
-import { FileType, detectFileType } from "@/command";
+import { FileType, detectFileType } from "../command";
 import FolderOpen from "~icons/ic/twotone-folder-open";
 import Reject from "~icons/ic/twotone-highlight-off";
 import UploadFile from "~icons/ic/twotone-upload-file";
@@ -34,8 +34,9 @@ const checkFilesType = async (paths: string[]) => {
   );
 };
 
-onMounted(() => {
+onMounted(() =>
   Promise.all([
+    /* eslint-disable @typescript-eslint/require-await */
     useTauriEvent<{ paths: string[] }>(TauriEvent.DRAG_ENTER, async (e) => {
       hover.value = true;
       console.log("DRAG_ENTER", e.payload);
@@ -44,7 +45,7 @@ onMounted(() => {
     useTauriEvent<{ paths: string[] }>(TauriEvent.DRAG_DROP, async (e) => {
       console.log("DRAG_DROP", e.payload);
       if (!(await checkFilesType(e.payload.paths)))
-        await message(props.directory ? "只支持文件夹" : "只支持文件");
+        await message(props.directory ? "请选择一个文件夹" : "请选择一个文件");
       else files.value = e.payload.paths;
       hover_accept.value = hover.value = false;
     }),
@@ -56,8 +57,9 @@ onMounted(() => {
       console.log("WINDOW_BLUR", e.payload);
       hover.value = hover_accept.value = false;
     }),
-  ]);
-});
+    /* eslint-enable @typescript-eslint/require-await */
+  ]),
+);
 </script>
 <template>
   <slot :select-files="selectFiles">

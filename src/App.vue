@@ -8,12 +8,12 @@ import {
   VWindow,
   VWindowItem,
 } from "vuetify/components";
-import KeygenView from "@/views/KeygenView.vue";
-import SignView from "@/views/SignView.vue";
-import ValidateView from "@/views/ValidateView.vue";
+import KeygenView from "./views/KeygenView.vue";
+import SignView from "./views/SignView.vue";
+import ValidateView from "./views/ValidateView.vue";
 import { mdiFileCheck, mdiFileKey, mdiKeyChain } from "@mdi/js";
 import { useSessionStorage } from "@vueuse/core";
-import ColorSwitcher from "@/components/ColorSwitcher.vue";
+import ColorSwitcher from "./components/ColorSwitcher.vue";
 
 enum Tab {
   sign = 0,

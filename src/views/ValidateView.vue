@@ -3,18 +3,21 @@ import {
   VBtn,
   VCard,
   VChip,
+  VChipGroup,
   VContainer,
   VForm,
   VStepper,
   VStepperActions,
   VTextField,
 } from "vuetify/components";
-import { computed, reactive, ref } from "vue";
+import { reactive, ref } from "vue";
 import FileSelector from "@/components/FileSelector.vue";
 import FilesSelector from "@/components/FilesSelector.vue";
 import { verifySignatures } from "@/command";
 import FolderOpen from "~icons/ic/twotone-folder-open";
 import { message } from "@tauri-apps/plugin-dialog";
+import { path } from "@tauri-apps/api";
+import { computedAsync } from "@vueuse/core";
 
 const rules = {
   required: (value: string | string[] | undefined) => !!value?.length || "必填",
@@ -34,11 +37,8 @@ const data = reactive({
   keyPath: "",
 });
 
-const fileNames = computed(() =>
-  data.signaturePaths.map((file) => {
-    const pathComponents = file.split(/[\\/]/);
-    return pathComponents[pathComponents.length - 1];
-  }),
+const fileNames = computedAsync(() =>
+  Promise.all(data.signaturePaths.map((file) => path.basename(file))),
 );
 
 const back = () => {
@@ -92,9 +92,11 @@ const submit = async () => {
                 @click:clear="data.signaturePaths = []"
                 @click:control="selectFiles"
               >
-                <VChip v-for="fileName in fileNames" :key="fileName">
-                  {{ fileName }}
-                </VChip>
+                <VChipGroup v-if="fileNames">
+                  <VChip v-for="fileName in fileNames" :key="fileName">
+                    {{ fileName }}
+                  </VChip>
+                </VChipGroup>
                 <template #append>
                   <VBtn :icon="FolderOpen" @click="selectFiles" />
                 </template>

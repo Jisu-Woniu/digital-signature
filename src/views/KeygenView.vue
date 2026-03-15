@@ -3,8 +3,8 @@ import { ref } from "vue";
 import { VBtn, VContainer, VForm, VTextField } from "vuetify/components";
 import { mdiCheck } from "@mdi/js";
 import { message } from "@tauri-apps/plugin-dialog";
-import FileSelector from "@/components/FileSelector.vue";
-import { generateKeyPair } from "@/command";
+import FileSelector from "../components/FileSelector.vue";
+import { generateKeyPair } from "../command";
 import FolderOpen from "~icons/ic/twotone-folder-open";
 const name = ref("");
 const email = ref("");
@@ -35,7 +35,9 @@ const generate = async () => {
       );
     }
   } catch (x) {
-    await message("生成失败，发生了以下错误：\n" + x);
+    await message(
+      `生成失败，发生了以下错误：\n${x instanceof Error ? x.message : String(x)}`,
+    );
   }
 };
 </script>
