@@ -2,7 +2,6 @@ import { URL, fileURLToPath } from "node:url";
 
 import { defineConfig } from "vite";
 import icons from "unplugin-icons/vite";
-import postcssPresetEnv from "postcss-preset-env";
 import vue from "@vitejs/plugin-vue";
 
 export default defineConfig({
@@ -22,11 +21,6 @@ export default defineConfig({
   },
 
   envPrefix: ["VITE_", "TAURI_ENV_*"],
-  css: {
-    postcss: {
-      plugins: [postcssPresetEnv],
-    },
-  },
   resolve: {
     alias: {
       "@": fileURLToPath(new URL("./src", import.meta.url)),
