@@ -1,6 +1,6 @@
 use std::{
     future::Future,
-    io::{BufRead, BufReader, Read, Seek},
+    io::{BufRead, BufReader, Seek},
     path::Path,
 };
 
@@ -14,7 +14,7 @@ use tokio::fs::File;
 use crate::Result;
 
 pub(crate) trait FromFile: Sized {
-    fn try_from_reader(reader: impl BufRead + Read + Seek + Send + Unpin) -> Result<Self>;
+    fn try_from_reader(reader: impl BufRead + Seek + Send + Unpin) -> Result<Self>;
     // fn try_from_async_reader(
     //     async_reader: impl AsyncRead + Send + Unpin + AsyncSeek,
     // ) -> Result<Self> {
@@ -23,7 +23,7 @@ pub(crate) trait FromFile: Sized {
     fn try_from_file(path: impl AsRef<Path> + Send) -> impl Future<Output = Result<Self>> + Send {
         async move {
             let file = File::open(path).await?.into_std().await;
-            Ok(Self::try_from_reader(BufReader::new(file))?)
+            Self::try_from_reader(BufReader::new(file))
         }
     }
 
@@ -38,7 +38,7 @@ pub(crate) trait FromFile: Sized {
 macro_rules! impl_from_file {
     ($type:ty) => {
         impl FromFile for $type {
-            fn try_from_reader(reader: impl BufRead + Read + Seek + Send + Unpin) -> Result<Self> {
+            fn try_from_reader(reader: impl BufRead + Seek + Send + Unpin) -> Result<Self> {
                 Ok(Self::from_armor_single(reader)?.0)
             }
         }
@@ -49,7 +49,7 @@ impl_from_file!(SignedSecretKey);
 impl_from_file!(SignedPublicKey);
 
 impl FromFile for Signature {
-    fn try_from_reader(reader: impl BufRead + Read + Send + Unpin + Seek) -> Result<Self> {
+    fn try_from_reader(reader: impl BufRead + Seek + Send + Unpin) -> Result<Self> {
         let signature = PacketParser::new(reader)
             .find_map(|packet| {
                 if let Ok(Packet::Signature(s)) = packet {

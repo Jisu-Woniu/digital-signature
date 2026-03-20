@@ -22,7 +22,7 @@ impl KeyPair {
         let signed_secret_key = SecretKeyParamsBuilder::default()
             // Set keygen params.
             .key_type(KeyType::Ed25519)
-            .primary_user_id(format!("{} <{}>", name, email))
+            .primary_user_id(format!("{name} <{email}>"))
             .preferred_symmetric_algorithms(smallvec![
                 SymmetricKeyAlgorithm::AES256,
                 SymmetricKeyAlgorithm::AES192,

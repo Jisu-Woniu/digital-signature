@@ -5,10 +5,10 @@ use std::path::{Path, PathBuf};
 use futures::future::try_join;
 use pgp::{composed::ArmorOptions, types::KeyDetails};
 use serde::Serialize;
-use tokio::fs::{write, DirBuilder};
+use tokio::fs::{DirBuilder, write};
 use zeroize::Zeroizing;
 
-use crate::{key_pair::KeyPair, secret_file::write_secret_file, Result};
+use crate::{Result, key_pair::KeyPair, secret_file::write_secret_file};
 
 /// Represents paths of key pair.
 ///
@@ -46,8 +46,8 @@ pub async fn write_key_pair(
     let signed_public_key = key_pair.public_key();
     let key_id = &hex::encode_upper(&signed_secret_key.legacy_key_id().as_ref()[4..]);
 
-    let secret_key_path = path.join(format!("{}_0x{}_SECRET.asc", name, key_id));
-    let public_key_path = path.join(format!("{}_0x{}_public.asc", name, key_id));
+    let secret_key_path = path.join(format!("{name}_0x{key_id}_SECRET.asc"));
+    let public_key_path = path.join(format!("{name}_0x{key_id}_public.asc"));
 
     let secret_key_armored =
         Zeroizing::new(signed_secret_key.to_armored_bytes(ArmorOptions::default())?);
@@ -73,7 +73,7 @@ mod tests {
         types::KeyDetails,
     };
 
-    use crate::{from_file::FromFile, key_pair::KeyPair, Result};
+    use crate::{Result, from_file::FromFile, key_pair::KeyPair};
 
     #[test]
     fn test() -> Result<()> {
