@@ -1,3 +1,5 @@
+@import url("vuetify/styles");
+
 :root {
   text-rendering: optimizelegibility;
   -webkit-font-smoothing: antialiased;

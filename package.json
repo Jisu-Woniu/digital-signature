@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "build": "run-p check build-only",
-    "check": "vue-tsc --noEmit",
+    "check": "vue-tsc -b",
     "build-only": "vp build",
     "dev": "vp dev",
     "format": "vp fmt .",
@@ -48,10 +48,5 @@
     "vite-plus": "latest",
     "vue-tsc": "^3.2.6"
   },
-  "packageManager": "pnpm@10.33.0+sha512.10568bb4a6afb58c9eb3630da90cc9516417abebd3fabbe6739f0ae795728da1491e9db5a544c76ad8eb7570f5c4bb3d6c637b2cb41bfdcdb47fa823c8649319",
-  "pnpm": {
-    "overrides": {
-      "vite": "npm:@voidzero-dev/vite-plus-core@latest"
-    }
-  }
+  "packageManager": "pnpm@10.33.0+sha512.10568bb4a6afb58c9eb3630da90cc9516417abebd3fabbe6739f0ae795728da1491e9db5a544c76ad8eb7570f5c4bb3d6c637b2cb41bfdcdb47fa823c8649319"
 }

@@ -1,4 +1,3 @@
-import "vuetify/styles";
 import "./styles.css";
 import App from "./App.vue";
 import "@fontsource/noto-sans-sc/chinese-simplified-300.css";

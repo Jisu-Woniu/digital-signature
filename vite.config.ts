@@ -7,13 +7,15 @@ export default defineConfig({
     "*": "vp check --fix",
   },
   lint: {
-    plugins: ["oxc", "typescript", "unicorn", "react", "vue"],
+    plugins: ["eslint", "oxc", "typescript", "unicorn", "vue"],
     categories: {
       correctness: "error",
       suspicious: "warn",
     },
     options: {
       typeAware: true,
+      // Type checking should use vue-tsc to support Vue SFCs, but oxlint doesn't support it currently.
+      // Disable type checking now.
       // typeCheck: true,
     },
     env: {
