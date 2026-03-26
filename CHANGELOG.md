@@ -127,4 +127,3 @@ All notable changes to this project will be documented in this file.
 - :bookmark: v0.1.0
 - :hammer: Add Makefile for some repetitive work.
 - :wrench: Add build config for Vite.
-

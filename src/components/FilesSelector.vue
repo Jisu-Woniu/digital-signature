@@ -28,9 +28,7 @@ const checkFilesType = async (paths: string[]) => {
   const expectedType = props.directory ? FileType.dir : FileType.file;
   return (
     paths.length !== 0 &&
-    (await Promise.all(paths.map(detectFileType))).every(
-      (fileType) => fileType === expectedType,
-    )
+    (await Promise.all(paths.map(detectFileType))).every((fileType) => fileType === expectedType)
   );
 };
 
@@ -66,9 +64,7 @@ onMounted(() =>
   <VDialog v-model="hover" height="100%">
     <VCard v-if="hover_accept" class="hover-indication-box">
       <VIcon :icon="UploadFile" class="hover-indication-icon" />
-      <div class="hover-indication-text text-blue-darken-3 mt-3">
-        拖拽至此处
-      </div>
+      <div class="hover-indication-text text-blue-darken-3 mt-3">拖拽至此处</div>
     </VCard>
     <VCard v-else class="hover-indication-box">
       <VIcon :icon="Reject" class="hover-indication-icon" />

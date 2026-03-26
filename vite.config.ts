@@ -1,10 +1,28 @@
-import { URL, fileURLToPath } from "node:url";
-
-import { defineConfig } from "vite";
+import { defineConfig } from "vite-plus";
 import icons from "unplugin-icons/vite";
 import vue from "@vitejs/plugin-vue";
 
 export default defineConfig({
+  staged: {
+    "*": "vp check --fix",
+  },
+  lint: {
+    plugins: ["oxc", "typescript", "unicorn", "react", "vue"],
+    categories: {
+      correctness: "error",
+      suspicious: "warn",
+    },
+    options: {
+      typeAware: true,
+      // typeCheck: true,
+    },
+    env: {
+      builtin: true,
+    },
+  },
+  fmt: {
+    ignorePatterns: ["pnpm-lock.yaml"],
+  },
   plugins: [
     vue(),
     icons({
@@ -23,7 +41,7 @@ export default defineConfig({
   envPrefix: ["VITE_", "TAURI_ENV_*"],
   resolve: {
     alias: {
-      "@": fileURLToPath(new URL("./src", import.meta.url)),
+      "@": "./src",
     },
   },
   build: {

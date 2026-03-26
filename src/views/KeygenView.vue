@@ -9,7 +9,7 @@ import FolderOpen from "~icons/ic/twotone-folder-open";
 const name = ref("");
 const email = ref("");
 const password = ref("");
-const valid = ref<boolean | null>(null);
+const valid = ref<boolean>();
 const file = ref<string>();
 const rules = {
   required: (value: string | undefined) => !!value?.trim() || "必填",
@@ -22,12 +22,7 @@ const rules = {
 const generate = async () => {
   try {
     if (valid.value) {
-      const paths = await generateKeyPair(
-        name.value,
-        email.value,
-        password.value,
-        file.value!,
-      );
+      const paths = await generateKeyPair(name.value, email.value, password.value, file.value!);
       await message(
         "生成成功\n" +
           `您的私钥路径为：${paths.secretKeyPath}\n` +
@@ -35,27 +30,16 @@ const generate = async () => {
       );
     }
   } catch (x) {
-    await message(
-      `生成失败，发生了以下错误：\n${x instanceof Error ? x.message : String(x)}`,
-    );
+    await message(`生成失败，发生了以下错误：\n${x instanceof Error ? x.message : String(x)}`);
   }
 };
 </script>
 
 <template>
   <VContainer fluid>
-    <VForm
-      v-model="valid"
-      validate-on="blur"
-      fast-fail
-      @submit.prevent="generate"
-    >
+    <VForm v-model="valid" validate-on="blur" fast-fail @submit.prevent="generate">
       <VTextField v-model="name" label="姓名" :rules="[rules.required]" />
-      <VTextField
-        v-model="email"
-        label="邮箱"
-        :rules="[rules.required, rules.email]"
-      />
+      <VTextField v-model="email" label="邮箱" :rules="[rules.required, rules.email]" />
       <VTextField v-model="password" label="密码（可选）" type="password" />
       <FileSelector v-slot="{ selectFile }" v-model="file" directory>
         <VTextField

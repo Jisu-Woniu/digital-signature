@@ -1,13 +1,5 @@
 <script setup lang="ts">
-import {
-  VApp,
-  VAppBar,
-  VMain,
-  VTab,
-  VTabs,
-  VWindow,
-  VWindowItem,
-} from "vuetify/components";
+import { VApp, VAppBar, VMain, VTab, VTabs, VWindow, VWindowItem } from "vuetify/components";
 import KeygenView from "./views/KeygenView.vue";
 import SignView from "./views/SignView.vue";
 import ValidateView from "./views/ValidateView.vue";
@@ -34,9 +26,7 @@ const tab = useSessionStorage("tab", Tab.sign);
         <VTabs v-model="tab" color="primary" align-tabs="center">
           <VTab :value="Tab.sign" :prepend-icon="mdiFileKey"> 签名 </VTab>
           <VTab :value="Tab.validate" :prepend-icon="mdiFileCheck"> 校验 </VTab>
-          <VTab :value="Tab.keygen" :prepend-icon="mdiKeyChain">
-            密钥生成
-          </VTab>
+          <VTab :value="Tab.keygen" :prepend-icon="mdiKeyChain"> 密钥生成 </VTab>
         </VTabs>
       </template>
     </VAppBar>

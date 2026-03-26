@@ -15,9 +15,7 @@ const { store: colorStore } = useColorMode({
   },
 });
 
-const { state: colorState, next: nextColor } = useCycleList<
-  "auto" | "light" | "dark"
->(["auto", "light", "dark"], {
+const { state: colorState, next: nextColor } = useCycleList(["auto", "light", "dark"] as const, {
   initialValue: colorStore.value,
 });
 
@@ -27,13 +25,7 @@ watchEffect(() => {
 </script>
 <template>
   <VBtn
-    :icon="
-      colorState === 'auto'
-        ? AutoLightMode
-        : colorState === 'light'
-          ? LightMode
-          : DarkMode
-    "
+    :icon="colorState === 'auto' ? AutoLightMode : colorState === 'light' ? LightMode : DarkMode"
     @click="nextColor()"
   />
 </template>

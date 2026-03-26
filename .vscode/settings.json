@@ -1,20 +1,11 @@
 {
-  "cSpell.words": [
-    "fontsource",
-    "iconsets",
-    "roboto",
-    "smallvec",
-    "subpacket",
-    "subpackets",
-    "thiserror",
-    "twotone",
-    "unhashed",
-    "unlisten",
-    "vuetify",
-    "vueuse",
-    "zeroize",
-    "zeroizing"
-  ],
   "conventionalCommits.scopes": ["deps", "release"],
-  "typescript.tsdk": "node_modules/typescript/lib"
+  "editor.codeActionsOnSave": {
+    "source.fixAll.oxc": "explicit"
+  },
+  "editor.defaultFormatter": "oxc.oxc-vscode",
+  "editor.formatOnSave": true,
+  "editor.formatOnSaveMode": "file",
+  "js/ts.tsdk.path": "node_modules/typescript/lib",
+  "oxc.fmt.configPath": "./vite.config.ts"
 }

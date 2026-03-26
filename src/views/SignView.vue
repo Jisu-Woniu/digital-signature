@@ -10,9 +10,9 @@ import {
   VTextField,
 } from "vuetify/components";
 import { computed, reactive, ref } from "vue";
-import FileSelector from "@/components/FileSelector.vue";
-import FilesSelector from "@/components/FilesSelector.vue";
-import { signFiles } from "@/command";
+import FileSelector from "../components/FileSelector.vue";
+import FilesSelector from "../components/FilesSelector.vue";
+import { signFiles } from "../command";
 import FolderOpen from "~icons/ic/twotone-folder-open";
 import { message } from "@tauri-apps/plugin-dialog";
 
@@ -52,14 +52,8 @@ const submit = async () => {
   if (valid.value) {
     if (step.value === items.value.length) {
       try {
-        const signatures = await signFiles(
-          data.filePaths,
-          data.keyPath,
-          data.passwd,
-        );
-        await message(
-          "签名成功。\n您的签名文件保存于：\n" + signatures.join("\n"),
-        );
+        const signatures = await signFiles(data.filePaths, data.keyPath, data.passwd);
+        await message("签名成功。\n您的签名文件保存于：\n" + signatures.join("\n"));
       } catch (error) {
         await message("校验失败，发生了以下错误：\n" + JSON.stringify(error));
       }
@@ -114,11 +108,7 @@ const submit = async () => {
                 </template>
               </VTextField>
             </FileSelector>
-            <VTextField
-              v-model="data.passwd"
-              label="私钥密码（可选）"
-              type="password"
-            />
+            <VTextField v-model="data.passwd" label="私钥密码（可选）" type="password" />
           </VCard>
         </template>
 

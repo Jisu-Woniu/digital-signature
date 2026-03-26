@@ -27,8 +27,7 @@ const hover_accept = ref(false);
 const checkFileType = async (paths: string[]) => {
   return (
     paths.length === 1 &&
-    (await detectFileType(paths[0])) ===
-      (props.directory ? FileType.dir : FileType.file)
+    (await detectFileType(paths[0])) === (props.directory ? FileType.dir : FileType.file)
   );
 };
 
@@ -64,9 +63,7 @@ onMounted(() =>
   <VDialog v-model="hover" height="100%">
     <VCard v-if="hover_accept" class="hover-indication-box">
       <VIcon :icon="UploadFile" class="hover-indication-icon" />
-      <div class="hover-indication-text text-blue-darken-3 mt-3">
-        拖拽至此处
-      </div>
+      <div class="hover-indication-text text-blue-darken-3 mt-3">拖拽至此处</div>
     </VCard>
     <VCard v-else class="hover-indication-box">
       <VIcon :icon="Reject" class="hover-indication-icon" />

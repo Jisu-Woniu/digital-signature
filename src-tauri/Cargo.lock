@@ -1123,7 +1123,7 @@ dependencies = [
 
 [[package]]
 name = "digital-signature"
-version = "1.3.0"
+version = "1.4.0"
 dependencies = [
  "anyhow",
  "digital-signature-crypto",
@@ -1139,7 +1139,7 @@ dependencies = [
 
 [[package]]
 name = "digital-signature-crypto"
-version = "1.3.0"
+version = "1.4.0"
 dependencies = [
  "futures",
  "hex",

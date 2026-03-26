@@ -1,21 +1,22 @@
 {
   "name": "digital-signature",
+  "version": "1.4.0",
   "private": true,
-  "version": "1.3.0",
   "type": "module",
   "scripts": {
     "build": "run-p check build-only",
     "check": "vue-tsc --noEmit",
-    "build-only": "vite build",
-    "dev": "vite",
-    "format": "prettier --write .",
-    "lint": "run-s \"lint:stylelint {@}\" \"lint:eslint {@}\" --",
-    "lint:eslint": "eslint \"*.ts\" \"*.js\" src/",
+    "build-only": "vp build",
+    "dev": "vp dev",
+    "format": "vp fmt .",
+    "lint": "run-s \"lint:stylelint {@}\" \"lint:oxlint {@}\" --",
+    "lint:oxlint": "vp lint \"*.ts\" \"*.js\" src/",
     "lint:stylelint": "stylelint \"**/*.{css,vue,html}\" --ignore-path .gitignore",
-    "preview": "vite preview",
+    "preview": "vp preview",
     "tauri": "tauri",
     "tauri:dev": "tauri dev -f devtools",
-    "tauri:build": "tauri build --no-bundle"
+    "tauri:build": "tauri build --no-bundle",
+    "prepare": "vp config"
   },
   "dependencies": {
     "@fontsource/noto-sans-sc": "^5.2.9",
@@ -36,10 +37,8 @@
     "@vue/eslint-config-prettier": "^10.2.0",
     "@vue/eslint-config-typescript": "^14.7.0",
     "@vue/tsconfig": "^0.9.1",
-    "eslint": "^10.1.0",
     "eslint-plugin-vue": "^10.8.0",
     "npm-run-all2": "^8.0.4",
-    "prettier": "^3.8.1",
     "stylelint": "^17.5.0",
     "stylelint-config-html": "^1.1.0",
     "stylelint-config-recommended-vue": "^1.6.1",
@@ -47,8 +46,14 @@
     "stylelint-prettier": "^5.0.3",
     "typescript": "^5.9.3",
     "unplugin-icons": "^23.0.1",
-    "vite": "^8.0.2",
+    "vite": "npm:@voidzero-dev/vite-plus-core@latest",
+    "vite-plus": "latest",
     "vue-tsc": "^3.2.6"
   },
-  "packageManager": "pnpm@10.32.1+sha512.a706938f0e89ac1456b6563eab4edf1d1faf3368d1191fc5c59790e96dc918e4456ab2e67d613de1043d2e8c81f87303e6b40d4ffeca9df15ef1ad567348f2be"
+  "packageManager": "pnpm@10.32.1+sha512.a706938f0e89ac1456b6563eab4edf1d1faf3368d1191fc5c59790e96dc918e4456ab2e67d613de1043d2e8c81f87303e6b40d4ffeca9df15ef1ad567348f2be",
+  "pnpm": {
+    "overrides": {
+      "vite": "npm:@voidzero-dev/vite-plus-core@latest"
+    }
+  }
 }

@@ -7,6 +7,7 @@
     "stylelint.vscode-stylelint",
     "tauri-apps.tauri-vscode",
     "vivaxy.vscode-conventional-commits",
+    "VoidZero.vite-plus-extension-pack",
     "Vue.volar"
   ]
 }

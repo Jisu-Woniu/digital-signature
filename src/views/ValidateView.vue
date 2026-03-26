@@ -11,9 +11,9 @@ import {
   VTextField,
 } from "vuetify/components";
 import { reactive, ref } from "vue";
-import FileSelector from "@/components/FileSelector.vue";
-import FilesSelector from "@/components/FilesSelector.vue";
-import { verifySignatures } from "@/command";
+import FileSelector from "../components/FileSelector.vue";
+import FilesSelector from "../components/FilesSelector.vue";
+import { verifySignatures } from "../command";
 import FolderOpen from "~icons/ic/twotone-folder-open";
 import { message } from "@tauri-apps/plugin-dialog";
 import { path } from "@tauri-apps/api";
@@ -51,10 +51,7 @@ const submit = async () => {
   if (valid.value) {
     if (step.value === items.value.length) {
       try {
-        const results = await verifySignatures(
-          data.signaturePaths,
-          data.keyPath,
-        );
+        const results = await verifySignatures(data.signaturePaths, data.keyPath);
         await message(
           "校验成功\n" +
             Object.keys(results)
@@ -78,10 +75,7 @@ const submit = async () => {
       <VStepper v-model="step" :items="items">
         <template #item.1>
           <VCard v-if="step === 1" title="请选择待校验签名" flat>
-            <FilesSelector
-              v-slot="{ selectFiles }"
-              v-model="data.signaturePaths"
-            >
+            <FilesSelector v-slot="{ selectFiles }" v-model="data.signaturePaths">
               <VTextField
                 v-model="data.signaturePaths"
                 :rules="[rules.required]"

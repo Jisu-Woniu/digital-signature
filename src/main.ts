@@ -1,6 +1,6 @@
 import "vuetify/styles";
 import "./styles.css";
-import App from "@/App.vue";
+import App from "./App.vue";
 import "@fontsource/noto-sans-sc/chinese-simplified-300.css";
 import "@fontsource/noto-sans-sc/chinese-simplified-400.css";
 import "@fontsource/roboto/latin-300.css";
