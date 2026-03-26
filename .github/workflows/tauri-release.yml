@@ -30,15 +30,13 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v6
-      - name: Install pnpm
-        uses: pnpm/action-setup@v5.0.0
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
+      - name: Install vp
+        uses: voidzero-dev/setup-vp@v1
         with:
           node-version: lts/*
-          cache: pnpm
-      - name: Install frontend dependencies with pnpm
-        run: pnpm install
+          cache: true
+      - name: Install frontend dependencies with vp
+        run: vp install
       - name: Setup Rust toolchain
         uses: moonrepo/setup-rust@v1
         with:
@@ -50,7 +48,7 @@ jobs:
         if: ${{ startsWith(matrix.platform, 'ubuntu') }}
         run: |
           sudo apt-get update && sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.1-dev libappindicator3-dev librsvg2-dev patchelf
-      - name: Run sccache
+      - name: Setup sccache
         uses: mozilla-actions/sccache-action@v0.0.9
       - name: Enable sccache for Rust
         shell: bash
@@ -71,6 +69,8 @@ jobs:
           releaseBody: "**Full Changelog**: https://github.com/${{github.repository}}/commits/v__VERSION__"
           releaseDraft: true
           prerelease: false
+          args: ${{ matrix.args }}
+          tauriScript: "vp run tauri"
       - name: Upload Build Artifacts
         uses: actions/upload-artifact@v7
         with:

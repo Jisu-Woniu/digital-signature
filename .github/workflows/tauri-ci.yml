@@ -30,15 +30,13 @@ jobs:
     steps:
       - name: Checkout repo
         uses: actions/checkout@v6
-      - name: Install pnpm
-        uses: pnpm/action-setup@v5.0.0
-      - name: Setup Node.js
-        uses: actions/setup-node@v6
+      - name: Install vp
+        uses: voidzero-dev/setup-vp@v1
         with:
           node-version: lts/*
-          cache: pnpm
-      - name: Install frontend dependencies with pnpm
-        run: pnpm install
+          cache: true
+      - name: Install frontend dependencies with vp
+        run: vp install
       - name: Setup Rust toolchain
         uses: moonrepo/setup-rust@v1
         with:
@@ -46,7 +44,7 @@ jobs:
           targets: ${{ startsWith(matrix.platform, 'macos') && 'aarch64-apple-darwin,x86_64-apple-darwin' || '' }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Run sccache-cache
+      - name: Setup sccache
         uses: mozilla-actions/sccache-action@v0.0.9
       - name: Enable sccache for Rust
         shell: bash
@@ -65,6 +63,7 @@ jobs:
         uses: tauri-apps/tauri-action@v0
         with:
           args: ${{ matrix.args }}
+          tauriScript: "vp run tauri"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Upload Build Artifacts

@@ -27,7 +27,7 @@ const hover_accept = ref(false);
 const checkFileType = async (paths: string[]) => {
   return (
     paths.length === 1 &&
-    (await detectFileType(paths[0])) === (props.directory ? FileType.dir : FileType.file)
+    (await detectFileType(paths[0]!)) === (props.directory ? FileType.dir : FileType.file)
   );
 };
 
