@@ -20,10 +20,7 @@ const rules = {
   required: (value: string | string[] | undefined) => !!value?.length || "必填",
 };
 
-const items = ref([
-  { title: "选择待签名文件", value: 1 },
-  { title: "选择私钥文件", value: 2 },
-]);
+const items = ref(["选择待签名文件", "选择私钥文件"]);
 
 const valid = ref(false);
 
@@ -70,7 +67,7 @@ const submit = async () => {
     <VForm v-model="valid" validate-on="input" @submit.prevent="submit">
       <VStepper v-model="step" :items="items">
         <template #item.1>
-          <VCard v-if="step === 1" title="请选择待签名文件" flat>
+          <VCard title="请选择待签名文件" flat>
             <FilesSelector v-slot="{ selectFiles }" v-model="data.filePaths">
               <VTextField
                 v-model="data.filePaths"
@@ -93,7 +90,7 @@ const submit = async () => {
           </VCard>
         </template>
         <template #item.2>
-          <VCard v-if="step === 2" title="请选择私钥文件" flat>
+          <VCard title="请选择私钥文件" flat>
             <FileSelector v-slot="{ selectFile }" v-model="data.keyPath">
               <VTextField
                 v-model="data.keyPath"

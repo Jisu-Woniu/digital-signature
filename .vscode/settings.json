@@ -7,5 +7,8 @@
   "editor.formatOnSave": true,
   "editor.formatOnSaveMode": "file",
   "js/ts.tsdk.path": "node_modules/typescript/lib",
-  "oxc.fmt.configPath": "./vite.config.ts"
+  "oxc.fmt.configPath": "./vite.config.ts",
+  "[vue]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  }
 }
