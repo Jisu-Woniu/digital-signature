@@ -33,8 +33,8 @@ importers:
         specifier: ^3.5.31
         version: 3.5.31(typescript@6.0.2)
       vuetify:
-        specifier: ^4.0.4
-        version: 4.0.4(typescript@6.0.2)(vue@3.5.31(typescript@6.0.2))
+        specifier: ^4.0.5
+        version: 4.0.5(typescript@6.0.2)(vue@3.5.31(typescript@6.0.2))
     devDependencies:
       '@iconify-json/ic':
         specifier: ^1.2.4
@@ -1616,8 +1616,8 @@ packages:
       typescript:
         optional: true
 
-  vuetify@4.0.4:
-    resolution: {integrity: sha512-sO2ux9RG0C1HKaP1HqDMro3+vbbmUJwzcKXuzaxQmUERAT/0FR0yfbwnj4PrMwWy1qc2WPJq01h4cr86FmNrFA==}
+  vuetify@4.0.5:
+    resolution: {integrity: sha512-pFysKOHuY3dROTVh9PdlhVz50ZR0E5/goY5ecTXc8F8tajUA2ee3xZ8Lqs1WtEw/X3w93wx/LogyjgaQCAL/Ig==}
     peerDependencies:
       typescript: '>=4.7'
       vite-plugin-vuetify: '>=2.1.0'
@@ -2957,7 +2957,7 @@ snapshots:
     optionalDependencies:
       typescript: 6.0.2
 
-  vuetify@4.0.4(typescript@6.0.2)(vue@3.5.31(typescript@6.0.2)):
+  vuetify@4.0.5(typescript@6.0.2)(vue@3.5.31(typescript@6.0.2)):
     dependencies:
       vue: 3.5.31(typescript@6.0.2)
     optionalDependencies:
