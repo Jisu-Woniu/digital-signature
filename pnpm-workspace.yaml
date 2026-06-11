@@ -1,2 +1,10 @@
+catalog:
+  vite: npm:@voidzero-dev/vite-plus-core@latest
+  vite-plus: latest
 overrides:
-  vite: npm:@voidzero-dev/vite-plus-core@^0.1.18
+  vite: "catalog:"
+peerDependencyRules:
+  allowAny:
+    - vite
+  allowedVersions:
+    vite: "*"
