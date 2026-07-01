@@ -11,13 +11,13 @@ import UploadFile from "~icons/ic/twotone-upload-file";
 
 const props = defineProps<{ directory?: boolean }>();
 
-const files = defineModel<string[]>({ default: [] });
+const files = defineModel<string[]>({ default: () => [] });
 
 const selectFiles = async () => {
-  const selected = (await open({
+  const selected = await open({
     multiple: true,
     directory: props.directory,
-  })) as string[];
+  });
   files.value = selected ?? [];
 };
 
@@ -41,9 +41,11 @@ onMounted(() =>
     }),
     useTauriEvent<{ paths: string[] }>(TauriEvent.DRAG_DROP, async (e) => {
       console.log("DRAG_DROP", e.payload);
-      if (!(await checkFilesType(e.payload.paths)))
+      if (!(await checkFilesType(e.payload.paths))) {
         await message(props.directory ? "请选择一个文件夹" : "请选择一个文件");
-      else files.value = e.payload.paths;
+      } else {
+        files.value = e.payload.paths;
+      }
       hover_accept.value = hover.value = false;
     }),
     useTauriEvent(TauriEvent.DRAG_LEAVE, (e) => {
