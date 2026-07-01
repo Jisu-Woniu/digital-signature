@@ -63,7 +63,7 @@ jobs:
         run: cargo test --workspace
       - id: tauri
         name: Build Tauri app
-        uses: tauri-apps/tauri-action@v0
+        uses: tauri-apps/tauri-action@v1
         with:
           args: ${{ matrix.args }}
           tauriScript: "vp run tauri"
