@@ -39,8 +39,8 @@ importers:
         specifier: ^3.5.42
         version: 3.5.42(typescript@6.0.3)
       vuetify:
-        specifier: ^4.1.12
-        version: 4.1.12(typescript@6.0.3)(vue@3.5.42(typescript@6.0.3))
+        specifier: ^4.2.0
+        version: 4.2.0(typescript@6.0.3)(vue@3.5.42(typescript@6.0.3))
     devDependencies:
       '@iconify-json/ic':
         specifier: ^1.2.4
@@ -861,6 +861,39 @@ packages:
       typescript:
         optional: true
       vue:
+        optional: true
+
+  '@vuetify/v0@1.2.1':
+    resolution: {integrity: sha512-lFBUeMmQiKbFR7JXC1Z74Z2dvvGLCqt/Wd9JQqg4falICTvHtlkulYqaHbtmByGV9eR7cbG1ohN1+7OQLLSPfg==}
+    peerDependencies:
+      '@adobe/leonardo-contrast-colors': '>=1.0.0'
+      '@ant-design/colors': '>=7.0.0'
+      '@flagsmith/flagsmith': '>=11.0.0'
+      '@floating-ui/dom': '>=1.8.0'
+      '@js-temporal/polyfill': '>=0.5.0'
+      '@material/material-color-utilities': '>=0.3.0'
+      launchdarkly-js-client-sdk: ^3.0.0
+      posthog-js: ^1.0.0
+      vue: '>=3.5.0 || >=3.6.0-0'
+      vue-i18n: '>=10.0.0'
+    peerDependenciesMeta:
+      '@adobe/leonardo-contrast-colors':
+        optional: true
+      '@ant-design/colors':
+        optional: true
+      '@flagsmith/flagsmith':
+        optional: true
+      '@floating-ui/dom':
+        optional: true
+      '@js-temporal/polyfill':
+        optional: true
+      '@material/material-color-utilities':
+        optional: true
+      launchdarkly-js-client-sdk:
+        optional: true
+      posthog-js:
+        optional: true
+      vue-i18n:
         optional: true
 
   '@vueuse/core@14.4.0':
@@ -1887,8 +1920,8 @@ packages:
       typescript:
         optional: true
 
-  vuetify@4.1.12:
-    resolution: {integrity: sha512-WXGbnuzqUGPZM7nF38C3jiucaLRutHZOICVW0wg1dyXppW11i+su/IT20nK+1o86nsgTdedejeEv53cJUrI30A==}
+  vuetify@4.2.0:
+    resolution: {integrity: sha512-KaMbAl57GG/zdLdL9dcMqEZligIK3jYvkPkpx+RS9DufD/TOfWKnlDTOUzoYlvmhT/3LfJ/usAt1bSoWfYX4JA==}
     peerDependencies:
       typescript: '>=4.7'
       vite-plugin-vuetify: '>=2.1.0'
@@ -2525,6 +2558,10 @@ snapshots:
   '@vue/tsconfig@0.9.1(typescript@6.0.3)(vue@3.5.42(typescript@6.0.3))':
     optionalDependencies:
       typescript: 6.0.3
+      vue: 3.5.42(typescript@6.0.3)
+
+  '@vuetify/v0@1.2.1(vue@3.5.42(typescript@6.0.3))':
+    dependencies:
       vue: 3.5.42(typescript@6.0.3)
 
   '@vueuse/core@14.4.0(vue@3.5.42(typescript@6.0.3))':
@@ -3454,11 +3491,22 @@ snapshots:
     optionalDependencies:
       typescript: 6.0.3
 
-  vuetify@4.1.12(typescript@6.0.3)(vue@3.5.42(typescript@6.0.3)):
+  vuetify@4.2.0(typescript@6.0.3)(vue@3.5.42(typescript@6.0.3)):
     dependencies:
+      '@vuetify/v0': 1.2.1(vue@3.5.42(typescript@6.0.3))
       vue: 3.5.42(typescript@6.0.3)
     optionalDependencies:
       typescript: 6.0.3
+    transitivePeerDependencies:
+      - '@adobe/leonardo-contrast-colors'
+      - '@ant-design/colors'
+      - '@flagsmith/flagsmith'
+      - '@floating-ui/dom'
+      - '@js-temporal/polyfill'
+      - '@material/material-color-utilities'
+      - launchdarkly-js-client-sdk
+      - posthog-js
+      - vue-i18n
 
   webpack-virtual-modules@0.6.2: {}
 
