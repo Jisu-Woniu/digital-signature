@@ -22,31 +22,31 @@
     "@fontsource/noto-sans-sc": "^5.3.0",
     "@fontsource/roboto": "^5.3.0",
     "@tauri-apps/api": "^2.12.1",
-    "@tauri-apps/plugin-dialog": "^2.7.3",
-    "@tauri-apps/plugin-fs": "^2.5.2",
+    "@tauri-apps/plugin-dialog": "^2.8.1",
+    "@tauri-apps/plugin-fs": "^2.6.0",
     "@vueuse/core": "^15.0.0",
     "vue": "^3.5.43",
-    "vuetify": "^4.2.2"
+    "vuetify": "^4.2.3"
   },
   "devDependencies": {
     "@iconify-json/ic": "^1.2.4",
     "@mdi/js": "^7.4.47",
-    "@tauri-apps/cli": "^2.12.0",
+    "@tauri-apps/cli": "^2.12.1",
     "@tsconfig/node24": "^24.0.5",
-    "@types/node": "^24.19.0",
+    "@types/node": "^24.19.1",
     "@vitejs/plugin-vue": "^6.0.9",
     "@vue/tsconfig": "^0.9.1",
     "npm-run-all2": "^9.0.3",
-    "stylelint": "^17.15.0",
-    "stylelint-config-html": "^1.1.0",
-    "stylelint-config-recommended-vue": "^1.6.1",
+    "stylelint": "^17.16.0",
+    "stylelint-config-html": "^2.0.0",
+    "stylelint-config-recommended-vue": "^2.0.0",
     "stylelint-config-standard": "^40.0.0",
     "stylelint-prettier": "^5.0.3",
     "typescript": "^6.0.3",
     "unplugin-icons": "^24.0.0",
     "vite": "catalog:",
     "vite-plus": "catalog:",
-    "vue-tsc": "^3.3.11"
+    "vue-tsc": "^3.3.12"
   },
   "packageManager": "pnpm@12.9.1+sha512.06b055fff5cd20dc12781de173ced3310ce0951bf2ec620211a16045d5444d5c93a663210764ef29a653a610459ba0368f0e74f84d80c54723cf95aae7bc0d6d"
 }
