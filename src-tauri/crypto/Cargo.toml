@@ -9,7 +9,7 @@ version.workspace = true
 [dependencies]
 futures = "0.3.34"
 hex = "0.4.3"
-pgp = "0.20.0"
+pgp = "0.21.0"
 rand = "0.8.8"
 serde = { version = "1.0.229", features = ["derive"] }
 smallvec = "1.16.2"
