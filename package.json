@@ -19,7 +19,7 @@
     "prepare": "vp config"
   },
   "dependencies": {
-    "@fontsource/noto-sans-sc": "^5.3.0",
+    "@fontsource/noto-sans-sc": "^5.3.1",
     "@fontsource/roboto": "^5.3.0",
     "@tauri-apps/api": "^2.12.3",
     "@tauri-apps/plugin-dialog": "^2.8.2",

@@ -176,8 +176,8 @@ importers:
   .:
     dependencies:
       '@fontsource/noto-sans-sc':
-        specifier: ^5.3.0
-        version: 5.3.0
+        specifier: ^5.3.1
+        version: 5.3.1
       '@fontsource/roboto':
         specifier: ^5.3.0
         version: 5.3.0
@@ -341,8 +341,8 @@ packages:
     peerDependencies:
       postcss-selector-parser: ^7.1.1
 
-  '@fontsource/noto-sans-sc@5.3.0':
-    resolution: {integrity: sha512-HeqIlGm0+ohOKxZLuHj1qW6r6avHH0OWdKERAcSDI0RQ+MXrteuLKA+M+5eOA8rYy0MFvOR5AT0fQo2rUkye0Q==}
+  '@fontsource/noto-sans-sc@5.3.1':
+    resolution: {integrity: sha512-YxZ/VWAWo9FWzH08Q6fGTzIW6vYNP2TMhUFCnfhlimbhdXnWrxJLrzX3KWt2FKnV0s8XiM5vjpGHQiyFRlTj0w==}
 
   '@fontsource/roboto@5.3.0':
     resolution: {integrity: sha512-BapRJOWYP+LZ21zp+wBQjfpPYKRoxc4LspJ/RLuI+HSMBD5u/X4O+ESDrSvEqDSy0rAl7GwBJ+09mdc16cVQ1Q==}
@@ -2300,7 +2300,7 @@ snapshots:
     dependencies:
       postcss-selector-parser: 7.1.6
 
-  '@fontsource/noto-sans-sc@5.3.0': {}
+  '@fontsource/noto-sans-sc@5.3.1': {}
 
   '@fontsource/roboto@5.3.0': {}
 
